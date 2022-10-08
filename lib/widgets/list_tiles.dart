@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import './tile_item.dart';
-import '../providers/Products.dart';
+import '../providers/products.dart';
 
 class ListTiles extends StatelessWidget {
   @override

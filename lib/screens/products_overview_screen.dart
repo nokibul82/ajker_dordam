@@ -1,3 +1,4 @@
+import 'package:ajker_dordam/screens/bazar_list_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/app_drawer.dart';
@@ -19,7 +20,9 @@ class ProductsOverviewScreen extends StatelessWidget {
           iconTheme: IconThemeData(color: Colors.black),
           actions: [
             IconButton(onPressed: () {}, icon: Icon(Icons.search_sharp)),
-            IconButton(onPressed: () {}, icon: Icon(Icons.shopping_basket))
+            IconButton(onPressed: () {
+              Navigator.of(context).pushNamed(BazarListScreen.routeName);
+            }, icon: Icon(Icons.shopping_basket))
           ],
         ),
         drawer: AppDrawer(),
@@ -39,7 +42,7 @@ class ProductsOverviewScreen extends StatelessWidget {
             child: Text("আর নয় অতিরিক্ত মূল্যে ক্রয় বাজার হোক শান্তিময়",textAlign: TextAlign.center,style: TextStyle(fontSize: 30,fontFamily: 'Mina Bold',fontStyle: FontStyle.italic,color: Colors.white),),
           ),
           Container(
-            height: MediaQuery.of(context).size.height * 0.65,
+            height: MediaQuery.of(context).size.height * 0.72,
             margin: EdgeInsets.symmetric(horizontal: 10),
             child: ListTiles(),
           ),

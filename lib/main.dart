@@ -1,8 +1,11 @@
-import 'package:ajker_dordam/screens/ProductsOverviewScreen.dart';
+import 'package:ajker_dordam/providers/bazar_list.dart';
+import 'package:ajker_dordam/screens/products_overview_screen.dart';
+import './screens/bazar_list_screen.dart';
+import 'package:ajker_dordam/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import './providers/Products.dart';
+import './providers/products.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,7 +17,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: Products())
+        ChangeNotifierProvider.value(value: Products()),
+        ChangeNotifierProvider.value(value: BazarList())
       ],
       child: MaterialApp(
         title: 'Ajker Dordam',
@@ -22,6 +26,9 @@ class MyApp extends StatelessWidget {
           primaryColor: color,
         ),
         home: ProductsOverviewScreen(),
+        routes: {
+          BazarListScreen.routeName: (context) => BazarListScreen()
+        },
       ),
     );
   }

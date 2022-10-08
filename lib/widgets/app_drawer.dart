@@ -7,6 +7,7 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
             color: Theme.of(context).primaryColor,
@@ -14,7 +15,7 @@ class AppDrawer extends StatelessWidget {
             height: 200,
             padding: EdgeInsets.only(top: 20.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
                   margin: EdgeInsets.only(bottom: 10),
@@ -36,30 +37,44 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
+            onTap: () {},
+            leading: Icon(Icons.price_check),
             title: Text("আজকের দরদাম"),
           ),
-          Divider( height: 5),
+          Divider(thickness: 2, height: 5),
           ListTile(
+            onTap: () {},
+            leading: Icon(Icons.warning_amber),
             title: Text("অভিযোগ করুন"),
           ),
-          Divider( height: 5),
+          Divider(thickness: 2, height: 5),
           ListTile(
+            onTap: () {},
+            leading: Icon(Icons.bar_chart),
             title: Text("মূল্যের লেখচিত্র"),
           ),
-          Divider( height: 5),
+          Divider(thickness: 2, height: 5),
           ListTile(
+            onTap: () {},
+            leading: Icon(Icons.discount_outlined),
             title: Text("মূল্যছাড়"),
           ),
           Divider(
+            thickness: 2,
             height: 5,
           ),
           ListTile(
+            onTap: () {},
+            leading: Icon(Icons.help_center_outlined),
             title: Text("সাহায্য"),
           ),
           Divider(
-            height: 20,
+            thickness: 2,
+            height: 5,
           ),
           ListTile(
+            onTap: () {},
+            leading: Icon(Icons.logout),
             title: Text("লগ আউট"),
           )
         ],
