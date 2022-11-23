@@ -65,10 +65,10 @@ class Products with ChangeNotifier{
     ),
     Product(
         id: 'p6',
-        title: 'ডাল',
+        title: 'মাছ',
         unit: '১ কেজি',
         price: 120,
-        description: 'ডাল হলো আমিষ যুক্ত খাবার',
+        description: 'মাছ হলো আমিষ যুক্ত খাবার',
         imageUrl: 'https://drive.google.com/uc?export=view&id=1CCKnv5s1vqZb2Ny1E7JCuWFRWskn-T1x'
     ),
     Product(
@@ -113,10 +113,10 @@ class Products with ChangeNotifier{
     ),
     Product(
         id: 'p12',
-        title: 'ডাল',
+        title: 'মাছ',
         unit: '১ কেজি',
         price: 130,
-        description: 'ডাল হলো আমিষ যুক্ত খাবার',
+        description: 'মাছ হলো আমিষ যুক্ত খাবার',
         imageUrl: 'https://drive.google.com/uc?export=view&id=1CCKnv5s1vqZb2Ny1E7JCuWFRWskn-T1x'
     ),
   ];

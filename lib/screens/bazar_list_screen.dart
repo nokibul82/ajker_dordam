@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 
 class BazarListScreen extends StatelessWidget {
   static const routeName = "/bazarlist";
-
   @override
   Widget build(BuildContext context) {
     final bazarList = Provider.of<BazarList>(context);
@@ -17,8 +16,7 @@ class BazarListScreen extends StatelessWidget {
                   fontFamily: 'Mina Regular',
                   color: Colors.black,
                   fontSize: 24)),
-          iconTheme: IconThemeData(color: Colors.black)
-      ),
+          iconTheme: IconThemeData(color: Colors.black)),
       body: Column(
         children: [
           Card(
@@ -42,7 +40,6 @@ class BazarListScreen extends StatelessWidget {
                     ),
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
-                  TextButton(onPressed: (){}, child: Text("Oder"))
                 ],
               ),
             ),
@@ -52,15 +49,15 @@ class BazarListScreen extends StatelessWidget {
           ),
           Expanded(
               child: ListView.builder(
-                itemCount: bazarList.items.length,
-                itemBuilder: (ctx, i) => BazarListItem(
-                    bazarList.items.values.toList()[i].id,
-                    bazarList.items.keys.toList()[i],
-                    bazarList.items.values.toList()[i].price,
-                    bazarList.items.values.toList()[i].quantity,
-                    bazarList.items.values.toList()[i].unit,
-                    bazarList.items.values.toList()[i].title),
-              ))
+            itemCount: bazarList.items.length,
+            itemBuilder: (ctx, i) => BazarListItem(
+                bazarList.items.values.toList()[i].id,
+                bazarList.items.keys.toList()[i],
+                bazarList.items.values.toList()[i].price,
+                bazarList.items.values.toList()[i].quantity,
+                bazarList.items.values.toList()[i].unit,
+                bazarList.items.values.toList()[i].title),
+          ))
         ],
       ),
     );

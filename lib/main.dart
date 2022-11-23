@@ -1,7 +1,7 @@
 import 'package:ajker_dordam/providers/bazar_list.dart';
 import 'package:ajker_dordam/screens/products_overview_screen.dart';
 import './screens/bazar_list_screen.dart';
-import 'package:ajker_dordam/screens/login_screen.dart';
+import './screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,9 +26,7 @@ class MyApp extends StatelessWidget {
           primaryColor: color,
         ),
         home: ProductsOverviewScreen(),
-        routes: {
-          BazarListScreen.routeName: (context) => BazarListScreen()
-        },
+        routes: {BazarListScreen.routeName: (context) => BazarListScreen()},
       ),
     );
   }

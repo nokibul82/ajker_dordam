@@ -20,9 +20,11 @@ class ProductsOverviewScreen extends StatelessWidget {
           iconTheme: IconThemeData(color: Colors.black),
           actions: [
             IconButton(onPressed: () {}, icon: Icon(Icons.search_sharp)),
-            IconButton(onPressed: () {
-              Navigator.of(context).pushNamed(BazarListScreen.routeName);
-            }, icon: Icon(Icons.shopping_basket))
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(BazarListScreen.routeName);
+                },
+                icon: Icon(Icons.shopping_basket))
           ],
         ),
         drawer: AppDrawer(),
@@ -33,16 +35,24 @@ class ProductsOverviewScreen extends StatelessWidget {
             width: double.infinity,
             margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(90),
-                    topRight: Radius.circular(70)),
+              color: Theme.of(context).primaryColor,
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(90),
+                  topRight: Radius.circular(70)),
             ),
             padding: EdgeInsets.all(3),
-            child: Text("আর নয় অতিরিক্ত মূল্যে ক্রয় বাজার হোক শান্তিময়",textAlign: TextAlign.center,style: TextStyle(fontSize: 30,fontFamily: 'Mina Bold',fontStyle: FontStyle.italic,color: Colors.white),),
+            child: Text(
+              "আর নয় অতিরিক্ত মূল্যে ক্রয়\nবাজার হোক শান্তিময়",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 30,
+                  fontFamily: 'Mina Bold',
+                  fontStyle: FontStyle.italic,
+                  color: Colors.white),
+            ),
           ),
           Container(
-            height: MediaQuery.of(context).size.height * 0.72,
+            height: MediaQuery.of(context).size.height * 0.71,
             margin: EdgeInsets.symmetric(horizontal: 10),
             child: ListTiles(),
           ),
