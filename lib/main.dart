@@ -1,5 +1,6 @@
 import 'package:ajker_dordam/providers/bazar_list.dart';
-import 'package:ajker_dordam/screens/products_overview_screen.dart';
+import './screens/complain_screen.dart';
+import './screens/products_overview_screen.dart';
 import './screens/bazar_list_screen.dart';
 import './screens/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -12,21 +13,25 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  static Color color = Color(0xff57DDDD);
+  static Color backColor = Color(0xff57DDDD);
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: Products()),
-        ChangeNotifierProvider.value(value: BazarList())
+        ChangeNotifierProvider.value(value: BazarList()),
       ],
       child: MaterialApp(
         title: 'Ajker Dordam',
         theme: ThemeData(
-          primaryColor: color,
+          primaryColor: backColor,
         ),
         home: ProductsOverviewScreen(),
-        routes: {BazarListScreen.routeName: (context) => BazarListScreen()},
+        routes: {
+          ProductsOverviewScreen.routeName: (context) => ProductsOverviewScreen(),
+          BazarListScreen.routeName: (context) => BazarListScreen(),
+          ComplainScreen.routeName: (context) => ComplainScreen()
+        },
       ),
     );
   }

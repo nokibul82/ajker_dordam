@@ -1,3 +1,5 @@
+import 'package:ajker_dordam/main.dart';
+
 import '../providers/bazar_list.dart';
 import '../providers/products.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,7 @@ class TileItem extends StatelessWidget {
     final product = Provider.of<Product>(context,listen: false);
     final bazarList = Provider.of<BazarList>(context, listen: false);
     return ListTile(
+      tileColor: MyApp.backColor.withOpacity(0.5),
       onTap: (){},
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       leading: CircleAvatar(
@@ -50,8 +53,8 @@ class TileItem extends StatelessWidget {
                     ));
                   },
                   icon: Icon(
-                    Icons.add_circle_outline,
-                    color: Color(0xff57DDDD),
+                    Icons.add_circle_outline_outlined,
+                    color: Colors.black,
                   )),
             )
           ],

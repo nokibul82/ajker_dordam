@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../main.dart';
+import '../screens/products_overview_screen.dart';
+import '../screens/complain_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -37,13 +37,17 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pushReplacementNamed(ProductsOverviewScreen.routeName);
+            },
             leading: Icon(Icons.price_check),
             title: Text("আজকের দরদাম"),
           ),
           Divider(thickness: 2, height: 5),
           ListTile(
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pushReplacementNamed(ComplainScreen.routeName);
+            },
             leading: Icon(Icons.warning_amber),
             title: Text("অভিযোগ করুন"),
           ),
