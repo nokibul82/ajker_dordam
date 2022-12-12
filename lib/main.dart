@@ -1,12 +1,17 @@
-import 'package:ajker_dordam/providers/bazar_list.dart';
-import './screens/complain_screen.dart';
-import './screens/products_overview_screen.dart';
-import './screens/bazar_list_screen.dart';
-import './screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import './providers/products.dart';
+import './providers/bazar_list.dart';
+import './providers/shops.dart';
+import './screens/complain_confirm_screen.dart';
+import './screens/image_picker_screen.dart';
+
+import './screens/complain_screen.dart';
+import './screens/products_overview_screen.dart';
+import './screens/bazar_list_screen.dart';
+import './screens/scanner_screen.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -20,6 +25,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(value: Products()),
         ChangeNotifierProvider.value(value: BazarList()),
+        ChangeNotifierProvider.value(value: Shops())
       ],
       child: MaterialApp(
         title: 'Ajker Dordam',
@@ -30,8 +36,12 @@ class MyApp extends StatelessWidget {
         routes: {
           ProductsOverviewScreen.routeName: (context) => ProductsOverviewScreen(),
           BazarListScreen.routeName: (context) => BazarListScreen(),
-          ComplainScreen.routeName: (context) => ComplainScreen()
+          ComplainScreen.routeName: (context) => ComplainScreen(),
+          ScannerScreen.routeName: (context) => ScannerScreen(),
+          ImagePickerScreen.routeName: (context) => ImagePickerScreen(),
+          ComplainConfirmScreen.routeName: (context) => ComplainConfirmScreen()
         },
+        debugShowCheckedModeBanner: false,
       ),
     );
   }

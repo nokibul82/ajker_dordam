@@ -1,4 +1,5 @@
 import 'package:ajker_dordam/main.dart';
+import 'package:ajker_dordam/screens/scanner_screen.dart';
 import 'package:ajker_dordam/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +31,7 @@ class ComplainScreen extends StatelessWidget {
             Card(
               margin: EdgeInsets.all(15),
               child: Container(
-                height: MediaQuery.of(context).size.height * 0.25,
+                height: MediaQuery.of(context).size.height * 0.5,
                 width: double.infinity,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
@@ -51,13 +52,15 @@ class ComplainScreen extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.2,
+              height: MediaQuery.of(context).size.height * 0.02,
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.94,
-              height: 80,
+              height: MediaQuery.of(context).size.height * 0.1,
               child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushReplacementNamed(ScannerScreen.routeName);
+                  },
                   style: ElevatedButton.styleFrom(
                       primary: MyApp.backColor,
                       shape: RoundedRectangleBorder(
@@ -87,11 +90,11 @@ class ComplainScreen extends StatelessWidget {
                   )),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
+              height: MediaQuery.of(context).size.height * 0.04,
             ),
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.94,
-              height: 80,
+              height: MediaQuery.of(context).size.height * 0.1,
               child: OutlinedButton(
                   onPressed: () {},
                   style: OutlinedButton.styleFrom(

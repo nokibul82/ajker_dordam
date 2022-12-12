@@ -44,13 +44,13 @@ class ProductsOverviewScreen extends StatelessWidget {
           color: MyApp.backColor,
           child: Container(
             alignment: Alignment.center,
-            height: MediaQuery.of(context).size.height * 0.12,
+            height: MediaQuery.of(context).size.height * 0.125,
             width: double.infinity,
             child: Text(
               "আর নয় অতিরিক্ত মূল্যে ক্রয়\nবাজার হোক শান্তিময়",
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 28,
                   fontFamily: 'Mina Bold',
                   fontStyle: FontStyle.italic,
                   color: Colors.white),
