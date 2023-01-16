@@ -1,26 +1,27 @@
-import 'package:ajker_dordam/main.dart';
-import 'package:ajker_dordam/screens/image_picker_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/qrscanneroverlay.dart';
 import './complain_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+import './image_picker_screen.dart';
+
 
 import '../providers/shops.dart';
+import '../providers/complains.dart';
 
 class ScannerScreen extends StatefulWidget {
-  const ScannerScreen({Key key}) : super(key: key);
   static const routeName = "/scannerScreen";
-
   @override
   State<ScannerScreen> createState() => _ScannerScreenState();
 }
 
 class _ScannerScreenState extends State<ScannerScreen> {
-  MobileScannerController cameraController = MobileScannerController();
 
-  Future<void> findShop(Shops shops, String code){
+  MobileScannerController cameraController = MobileScannerController();
+  var _complain = Complain(id: DateTime.now().toString(), shopId: "", shopName: "", shopImageUrl: "", description: "", receiptImageUrl: "");
+
+  void findShop(Shops shops, String code, BuildContext context){
     final Shop shop = shops.findShop(code);
     if (shop != null) {
       showDialog(
@@ -51,9 +52,21 @@ class _ScannerScreenState extends State<ScannerScreen> {
                 ),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(20),
-                  child: Image.network(
+                  child:Image.network(
                       shop.imageURL,
-                      fit: BoxFit.cover),
+                      fit: BoxFit.cover,
+                      loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+                              : null,
+                        ),
+                      );
+                    },
+                ),
                 ),
               ],
             ),
@@ -61,8 +74,9 @@ class _ScannerScreenState extends State<ScannerScreen> {
             actions: [
               TextButton(
                   onPressed: () {
+                    _complain = Complain(id: DateTime.now().toString(), shopId: shop.id, shopName: shop.name, shopImageUrl: shop.imageURL, description: "", receiptImageUrl: "");
+                    Provider.of<Complains>(context,listen: false).setTemporaryComplain(_complain);
                     Navigator.of(context).pushReplacementNamed(ImagePickerScreen.routeName);
-                    cameraController.dispose();
                   },
                   child: Text(
                     "হ্যাঁ নিশ্চিত",
@@ -103,7 +117,6 @@ class _ScannerScreenState extends State<ScannerScreen> {
             backgroundColor: Colors.white,
           ));
     }
-
   }
 
   @override
@@ -167,7 +180,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
             controller: cameraController,
             onDetect: (barcode, args) async {
               final String code = barcode.rawValue.toString();
-              findShop(shops, code);
+              findShop(shops, code,context);
             }),
         QRScannerOverlay(overlayColour: Colors.black.withOpacity(0.5))
       ]),

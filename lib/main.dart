@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import './providers/products.dart';
 import './providers/bazar_list.dart';
 import './providers/shops.dart';
+import './providers/complains.dart';
 import './screens/complain_confirm_screen.dart';
 import './screens/image_picker_screen.dart';
 
@@ -13,7 +15,9 @@ import './screens/bazar_list_screen.dart';
 import './screens/scanner_screen.dart';
 
 
-void main() {
+Future main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -25,7 +29,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(value: Products()),
         ChangeNotifierProvider.value(value: BazarList()),
-        ChangeNotifierProvider.value(value: Shops())
+        ChangeNotifierProvider.value(value: Shops()),
+        ChangeNotifierProvider.value(value: Complains())
       ],
       child: MaterialApp(
         title: 'Ajker Dordam',

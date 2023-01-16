@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "975101534757",
+    "project_id": "ajker-dordam",
+    "storage_bucket": "ajker-dordam.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:975101534757:android:546d596a444ffc0ee295cc",
+        "android_client_info": {
+          "package_name": "com.example.ajker_dordam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "975101534757-q714n7aseoer7a58c7qeqa45h9fi8u7t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1mD0PA5b9KQisE9Vr4AWaLfXdLhCSt38"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "975101534757-q714n7aseoer7a58c7qeqa45h9fi8u7t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
