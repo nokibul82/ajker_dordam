@@ -52,21 +52,13 @@ class _ScannerScreenState extends State<ScannerScreen> {
                 ),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(20),
-                  child:Image.network(
-                      shop.imageURL,
-                      fit: BoxFit.cover,
-                      loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
-                              : null,
-                        ),
-                      );
-                    },
-                ),
+                  child:FadeInImage(
+                    fadeInCurve: Curves.bounceIn,
+                    placeholder:
+                    AssetImage('assets/images/placeholder.png'),
+                    image: NetworkImage(shop.imageURL),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ],
             ),
@@ -74,7 +66,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
             actions: [
               TextButton(
                   onPressed: () {
-                    _complain = Complain(id: DateTime.now().toString(), shopId: shop.id, shopName: shop.name, shopImageUrl: shop.imageURL, description: "", receiptImageUrl: "");
+                    _complain = Complain(id: DateTime.now().toString(), shopId: shop.id, shopName: shop.name, shopImageUrl: shop.imageURL, shopAddress: shop.address,description: "", receiptImageUrl: "");
                     Provider.of<Complains>(context,listen: false).setTemporaryComplain(_complain);
                     Navigator.of(context).pushReplacementNamed(ImagePickerScreen.routeName);
                   },

@@ -30,7 +30,6 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
         this.image = tempPath;
         this.name = tempName;
       });
-      print(tempName);
     } on PlatformException catch (e) {
       print(e);
     }
@@ -68,30 +67,32 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Card(
-              elevation: 6,
+              elevation: 10,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(30))),
               child: Container(
-                  width: 290,
-                  height: 330,
-                  color: Colors.grey.withOpacity(0.3),
+                  width: MediaQuery.of(context).size.width * 0.86,
+                  height: MediaQuery.of(context).size.width * 0.86,
                   alignment: Alignment.center,
                   child: image == null
-                      ? Column(
-                          children: [
-                            Text(
-                              "রশিদ এর ছবি দিন",
-                              style: TextStyle(
-                                  fontFamily: 'Mina Regular',
-                                  color: Colors.black,
-                                  fontSize: 18),
-                            ),
-                          ],
+                      ? Center(
+                          child: Text(
+                            "রশিদ এর ছবি দিন",
+                            style: TextStyle(
+                                fontFamily: 'Mina Regular',
+                                color: Colors.black,
+                                fontSize: 18),
+                          ),
                         )
-                      : Image.file(
-                          image,
+                      : FadeInImage(
+                          fadeInCurve: Curves.bounceIn,
+                          placeholder:
+                              AssetImage('assets/images/placeholder.png'),
+                          image: FileImage(image),
                           fit: BoxFit.cover,
                         )),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -110,10 +111,11 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                             pickImage(ImageSource.camera);
                           },
                           style: ElevatedButton.styleFrom(
-                              primary: MyApp.backColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                              )),
+                            primary: MyApp.backColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                            ),
+                          ),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
@@ -188,7 +190,9 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                     ),
                     child: ElevatedButton(
                       onPressed: () {
-                        complains.uploadImage(name,image,complains.temporaryComplain);
+                        // Submit Button
+                        complains.setImage(image);
+                        complains.setName(name);
                         Navigator.of(context).pushReplacementNamed(
                             ComplainConfirmScreen.routeName);
                       },

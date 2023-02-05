@@ -12,7 +12,7 @@ class ProductsOverviewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: MyApp.backColor,
         title: Text(
           "আজকের দরদাম",
           style: TextStyle(
@@ -34,7 +34,8 @@ class ProductsOverviewScreen extends StatelessWidget {
         ],
       ),
       drawer: AppDrawer(),
-      body: Column(children: [
+      body: Column(
+          children: [
         Card(
           elevation: 4,
           shape: RoundedRectangleBorder(

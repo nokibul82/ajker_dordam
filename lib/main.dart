@@ -22,7 +22,7 @@ Future main() async{
 }
 
 class MyApp extends StatelessWidget {
-  static Color backColor = Color(0xff57DDDD);
+  static Color backColor = Color(0xff57dddd);
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

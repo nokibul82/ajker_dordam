@@ -7,6 +7,7 @@ class Complain with ChangeNotifier {
   final String shopId;
   final String shopName;
   final String shopImageUrl;
+  final String shopAddress;
   String receiptImageUrl;
   String description;
 
@@ -15,6 +16,7 @@ class Complain with ChangeNotifier {
       @required this.shopId,
       @required this.shopName,
       @required this.shopImageUrl,
+      @required this.shopAddress,
       @required this.description,
       @required this.receiptImageUrl});
 }
@@ -22,10 +24,25 @@ class Complain with ChangeNotifier {
 class Complains with ChangeNotifier {
   UploadTask _uploadTask;
   Complain _temporaryComplain;
+  File _name;
+  File _image;
 
-  Complain get temporaryComplain {
-    return _temporaryComplain;
+
+
+  void setName(File value) {
+    _name = value;
+    notifyListeners();
   }
+
+
+  void setImage(File value) {
+    _image = value;
+    notifyListeners();
+  }
+
+  File get getImage => _image;
+
+  Complain get temporaryComplain => _temporaryComplain;
 
   void setTemporaryComplain(Complain value) {
     _temporaryComplain = value;
@@ -33,28 +50,10 @@ class Complains with ChangeNotifier {
   }
 
   List<Complain> _items = [
-    Complain(
-        id: "C1",
-        shopId: "S1",
-        shopName: "Bismillah Store",
-        shopImageUrl: "",
-        description: "This is a vagetable shop.It has a good quality products",
-        receiptImageUrl: ""),
-    Complain(
-        id: "C2",
-        shopId: "S2",
-        shopName: "Kumilla Store",
-        shopImageUrl: "",
-        description: "This is a chocolate shop.It has a good quality products",
-        receiptImageUrl: ""),
   ];
 
   List<Complain> get items {
     return [..._items];
-  }
-
-  String get getLink {
-    return _temporaryComplain.receiptImageUrl;
   }
 
   void addComplain(Complain complain) {
@@ -63,14 +62,15 @@ class Complains with ChangeNotifier {
         shopId: complain.shopId,
         shopName: complain.shopName,
         shopImageUrl: complain.shopImageUrl,
+        shopAddress: complain.shopAddress,
         receiptImageUrl: complain.receiptImageUrl,
         description: complain.description);
     _items.add(newComplain);
   }
 
-  Future<void> uploadImage(File name, image, Complain complain) async {
-    final path = 'images/${name}';
-    final file = image;
+  Future<void> uploadImage(Complain complain) async {
+    final path = 'images/${_name}';
+    final file = _image;
 
     final ref = FirebaseStorage.instance.ref().child(path);
     _uploadTask = ref.putFile(file);

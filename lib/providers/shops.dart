@@ -17,14 +17,14 @@ class Shops with ChangeNotifier {
   List<Shop> _items = [
     Shop(
         id: "shop1",
-        name: "Bismillah Shop",
-        address: "Dhaka,Bangladesh",
+        name: "বিসমিল্লাহ্ স্টোর‌",
+        address: "ঢাকা,বাংলাদেশ",
         imageURL:
             "https://drive.google.com/uc?export=view&id=1okdfZAMpo7SqgvtRECT02hyg27Vy8Bps"),
     Shop(
         id: "shop2",
-        name: "Forkan Store",
-        address: "Jatrabari,Dhaka",
+        name: "ফোরকান স্টোর",
+        address: "যাত্রাবাড়ী,ঢাকা",
         imageURL:
             "https://drive.google.com/uc?export=view&id=1muKQHh9JORmrYqTu4Dx0lMDbx5NM2OM7")
   ];
