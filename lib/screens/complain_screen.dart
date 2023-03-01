@@ -1,7 +1,8 @@
-import 'package:ajker_dordam/main.dart';
-import 'package:ajker_dordam/screens/scanner_screen.dart';
-import 'package:ajker_dordam/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:ajker_dordam/main.dart';
+import './complain_history_screen.dart';
+import './scanner_screen.dart';
+import '../widgets/app_drawer.dart';
 
 class ComplainScreen extends StatelessWidget {
   const ComplainScreen({Key key}) : super(key: key);
@@ -17,7 +18,7 @@ class ComplainScreen extends StatelessWidget {
               style: TextStyle(
                   fontFamily: 'Mina Regular',
                   color: Colors.black,
-                  fontSize: 24),
+                  fontSize: 22),
             ),
             iconTheme: IconThemeData(color: Colors.black),
             shape: RoundedRectangleBorder(
@@ -96,7 +97,9 @@ class ComplainScreen extends StatelessWidget {
               width: MediaQuery.of(context).size.width * 0.94,
               height: MediaQuery.of(context).size.height * 0.1,
               child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushReplacementNamed(ComplainHistoryScreen.routeName);
+                  },
                   style: OutlinedButton.styleFrom(
                       side: BorderSide(width: 2),
                       shape: RoundedRectangleBorder(

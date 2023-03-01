@@ -15,7 +15,7 @@ class BazarListScreen extends StatelessWidget {
               style: TextStyle(
                   fontFamily: 'Mina Regular',
                   color: Colors.black,
-                  fontSize: 24)),
+                  fontSize: 22)),
           iconTheme: IconThemeData(color: Colors.black)),
       body: Column(
         children: [

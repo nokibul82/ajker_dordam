@@ -1,4 +1,5 @@
 import 'package:ajker_dordam/main.dart';
+import 'package:ajker_dordam/screens/complain_success_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
@@ -28,9 +29,9 @@ class _ComplainConfirmScreenState extends State<ComplainConfirmScreen> {
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
           title: Text(
-            "অভিযোগ যাচাই",
+            "অভিযোগ মন্তব্য",
             style: TextStyle(
-                fontFamily: 'Mina Regular', color: Colors.black, fontSize: 24),
+                fontFamily: 'Mina Regular', color: Colors.black, fontSize: 22),
           ),
           actions: [
             TextButton(
@@ -40,7 +41,8 @@ class _ComplainConfirmScreenState extends State<ComplainConfirmScreen> {
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
                             elevation: 10,
-                            title: Icon(Icons.warning_amber),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+                            title: Icon(Icons.warning_amber,size: 32),
                             content: Text(
                               "কোনো মন্তব্য নেই। অনুগ্রহ করে মন্তব্য লিখুন।",
                               textAlign: TextAlign.center,
@@ -80,7 +82,13 @@ class _ComplainConfirmScreenState extends State<ComplainConfirmScreen> {
                                         fontSize: 24)),
                                 actions: [
                                   TextButton(
-                                      onPressed: () {},
+                                      onPressed: () async{
+                                        complain.description = _textController.text;
+                                        complains.setTemporaryComplain(complain);
+                                        await complains.uploadImage();
+                                        await complains.addComplain();
+                                        Navigator.pushReplacementNamed(context, ComplainSuccessScreen.routeName);
+                                      },
                                       child: Text(
                                         "হ্যাঁ নিশ্চিত",
                                         textAlign: TextAlign.center,
@@ -181,7 +189,7 @@ class _ComplainConfirmScreenState extends State<ComplainConfirmScreen> {
                               placeholder:
                                   AssetImage('assets/images/placeholder.png'),
                               image: NetworkImage(shopImage),
-                              fit: BoxFit.fill,
+                              fit: BoxFit.cover,
                             )),
                 ),
               ],
@@ -200,14 +208,14 @@ class _ComplainConfirmScreenState extends State<ComplainConfirmScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "complain.shopName",
+                          complain.shopName,
                           style: TextStyle(
                               fontFamily: 'Mina Regular',
                               color: Colors.black,
                               fontSize: 18),
                         ),
                         Text(
-                          "complain.shopAddress",
+                          complain.shopAddress,
                           style: TextStyle(
                               fontFamily: 'Mina Regular',
                               color: Colors.black,

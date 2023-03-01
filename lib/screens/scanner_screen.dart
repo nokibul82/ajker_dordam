@@ -66,7 +66,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
             actions: [
               TextButton(
                   onPressed: () {
-                    _complain = Complain(id: DateTime.now().toString(), shopId: shop.id, shopName: shop.name, shopImageUrl: shop.imageURL, shopAddress: shop.address,description: "", receiptImageUrl: "");
+                    _complain = Complain(id: "", shopId: shop.id, shopName: shop.name, shopImageUrl: shop.imageURL, shopAddress: shop.address,description: "", receiptImageUrl: "", dateTime: "");
                     Provider.of<Complains>(context,listen: false).setTemporaryComplain(_complain);
                     Navigator.of(context).pushReplacementNamed(ImagePickerScreen.routeName);
                   },
@@ -120,7 +120,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
         title: Text(
           "অভিযোগ",
           style: TextStyle(
-              fontFamily: 'Mina Regular', color: Colors.black, fontSize: 24),
+              fontFamily: 'Mina Regular', color: Colors.black, fontSize: 22),
         ),
         leading: IconButton(
           onPressed: () {

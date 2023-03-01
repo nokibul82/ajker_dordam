@@ -20,7 +20,8 @@ dependencies:
   flutter:
     sdk: flutter
   provider: ^4.3.3
-  intl: ^0.15.8
+  intl: ^0.17.0
+  qr_flutter: ^4.0.0
   mobile_scanner: ^2.1.0
   image_picker: ^0.8.6
 
@@ -30,6 +31,8 @@ dependencies:
   firebase_core: ^2.4.0
   firebase_storage: ^11.0.9
   carousel_slider: ^4.2.1
+  firebase_auth: ^4.2.8
+  google_sign_in: ^5.4.4
 
 dev_dependencies:
   flutter_test:
@@ -51,6 +54,7 @@ flutter:
   assets:
     - assets/images/placeholder.png
     - assets/images/placeholder.jpg
+    - assets/images/success.gif
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

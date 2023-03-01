@@ -1,3 +1,7 @@
+import 'package:ajker_dordam/screens/edit_product_screen.dart';
+import 'package:ajker_dordam/screens/complain_history_screen.dart';
+import 'package:ajker_dordam/screens/complain_success_screen.dart';
+import 'package:ajker_dordam/screens/users_products_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,6 +18,12 @@ import './screens/products_overview_screen.dart';
 import './screens/bazar_list_screen.dart';
 import './screens/scanner_screen.dart';
 
+
+enum UserRole {
+  admin,
+  customer,
+  shopkeeper
+}
 
 Future main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,14 +47,18 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primaryColor: backColor,
         ),
-        home: ProductsOverviewScreen(),
+        home: ComplainScreen(),
         routes: {
           ProductsOverviewScreen.routeName: (context) => ProductsOverviewScreen(),
           BazarListScreen.routeName: (context) => BazarListScreen(),
           ComplainScreen.routeName: (context) => ComplainScreen(),
           ScannerScreen.routeName: (context) => ScannerScreen(),
           ImagePickerScreen.routeName: (context) => ImagePickerScreen(),
-          ComplainConfirmScreen.routeName: (context) => ComplainConfirmScreen()
+          ComplainConfirmScreen.routeName: (context) => ComplainConfirmScreen(),
+          ComplainSuccessScreen.routeName: (context) => ComplainSuccessScreen(),
+          ComplainHistoryScreen.routeName: (context) => ComplainHistoryScreen(),
+          UserProductsScreen.routeName: (context) => UserProductsScreen(),
+          EditProductScreen.routeName: (context) => EditProductScreen()
         },
         debugShowCheckedModeBanner: false,
       ),

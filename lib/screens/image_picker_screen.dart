@@ -44,7 +44,7 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
         title: Text(
           "রশিদ সংগ্রহ",
           style: TextStyle(
-              fontFamily: 'Mina Regular', color: Colors.black, fontSize: 24),
+              fontFamily: 'Mina Regular', color: Colors.black, fontSize: 22),
         ),
         actions: [],
         leading: IconButton(

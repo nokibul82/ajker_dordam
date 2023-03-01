@@ -16,7 +16,7 @@ class ProductsOverviewScreen extends StatelessWidget {
         title: Text(
           "আজকের দরদাম",
           style: TextStyle(
-              fontFamily: 'Mina Regular', color: Colors.black, fontSize: 24),
+              fontFamily: 'Mina Regular', color: Colors.black, fontSize: 22),
         ),
         iconTheme: IconThemeData(color: Colors.black),
         shape: RoundedRectangleBorder(

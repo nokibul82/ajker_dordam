@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../screens/products_overview_screen.dart';
 import '../screens/complain_screen.dart';
+import '../screens/user_shops_screen.dart';
+import '../screens/users_products_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -38,7 +40,8 @@ class AppDrawer extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
-              Navigator.of(context).pushReplacementNamed(ProductsOverviewScreen.routeName);
+              Navigator.of(context)
+                  .pushReplacementNamed(ProductsOverviewScreen.routeName);
             },
             leading: Icon(Icons.price_check),
             title: Text("আজকের দরদাম"),
@@ -46,36 +49,37 @@ class AppDrawer extends StatelessWidget {
           Divider(thickness: 2, height: 5),
           ListTile(
             onTap: () {
-              Navigator.of(context).pushReplacementNamed(ComplainScreen.routeName);
+              Navigator.of(context)
+                  .pushReplacementNamed(ComplainScreen.routeName);
             },
             leading: Icon(Icons.warning_amber),
             title: Text("অভিযোগ করুন"),
           ),
           Divider(thickness: 2, height: 5),
           ListTile(
-            onTap: () {},
-            leading: Icon(Icons.bar_chart),
-            title: Text("মূল্যের লেখচিত্র"),
+            onTap: () {
+              Navigator.of(context)
+                  .pushReplacementNamed(UserProductsScreen.routeName);
+            },
+            leading: Icon(Icons.add_task),
+            title: Text("পণ্য যোগ / হালনাগাদ"),
           ),
           Divider(thickness: 2, height: 5),
           ListTile(
-            onTap: () {},
-            leading: Icon(Icons.discount_outlined),
-            title: Text("মূল্যছাড়"),
+            onTap: () {
+              Navigator.of(context)
+                  .pushReplacementNamed(UserShopsScreen.routeName);
+            },
+            leading: Icon(Icons.add_business),
+            title: Text("দোকান যোগ / হালনাগাদ"),
           ),
-          Divider(
-            thickness: 2,
-            height: 5,
-          ),
+          Divider(thickness: 2, height: 5),
           ListTile(
             onTap: () {},
             leading: Icon(Icons.help_center_outlined),
             title: Text("সাহায্য"),
           ),
-          Divider(
-            thickness: 2,
-            height: 5,
-          ),
+          Divider(thickness: 2, height: 5,),
           ListTile(
             onTap: () {},
             leading: Icon(Icons.logout),
