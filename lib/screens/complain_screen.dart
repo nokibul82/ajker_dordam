@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:ajker_dordam/main.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/shops.dart';
 import './complain_history_screen.dart';
 import './scanner_screen.dart';
 import '../widgets/app_drawer.dart';
+import '../main.dart';
 
 class ComplainScreen extends StatelessWidget {
   const ComplainScreen({Key key}) : super(key: key);
@@ -10,6 +13,7 @@ class ComplainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         appBar: AppBar(
             backgroundColor: Theme.of(context).primaryColor,
@@ -59,7 +63,8 @@ class ComplainScreen extends StatelessWidget {
               width: MediaQuery.of(context).size.width * 0.94,
               height: MediaQuery.of(context).size.height * 0.1,
               child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async{
+                    await Provider.of<Shops>(context, listen: false).fetchAndSetShops();
                     Navigator.of(context).pushReplacementNamed(ScannerScreen.routeName);
                   },
                   style: ElevatedButton.styleFrom(

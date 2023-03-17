@@ -21,8 +21,9 @@ class _ComplainConfirmScreenState extends State<ComplainConfirmScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final complains = Provider.of<Complains>(context,listen: true);
+    final complains = Provider.of<Complains>(context,listen: false);
     Complain complain = complains.temporaryComplain;
+    print(complain);
     shopImage = complain.shopImageUrl;
     receiptImage = complains.getImage;
     return Scaffold(

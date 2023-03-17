@@ -63,7 +63,7 @@ class ComplainHistoryScreen extends StatelessWidget {
                                           complainData.items[i].shopName,
                                           complainData.items[i].shopImageUrl,
                                           complainData.items[i].shopAddress,
-                                          complainData.items[i].dateTime),
+                                          complainData.items[i].dateTime.toIso8601String()),
                                   Divider()
                                 ],
                               ),

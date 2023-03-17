@@ -19,7 +19,7 @@ class UserProductsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
-        title: const Text("পণ্য যোগ",
+        title: const Text("পণ্য যোগ / হালনাগাদ",
             style: TextStyle(
             fontFamily: 'Mina Regular', color: Colors.black, fontSize: 22),
         ),

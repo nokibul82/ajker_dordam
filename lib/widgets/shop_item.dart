@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/products.dart';
-import '../screens/edit_product_screen.dart';
+import '../providers/shops.dart';
+import '../screens/edit_shop_screen.dart';
 
-class ProductItem extends StatelessWidget {
+class ShopItem extends StatelessWidget {
   final String id;
-  final String title;
-  final String unit;
-  final double price;
+  final String name;
+  final String address;
   final String imageUrl;
+  final DateTime created_at;
 
-  const ProductItem(this.id, this.title, this.unit, this.price, this.imageUrl);
+  const ShopItem(
+      this.id,
+      this.name,
+      this.address,
+      this.imageUrl,
+      this.created_at);
 
   @override
   Widget build(BuildContext context) {
@@ -20,21 +26,24 @@ class ProductItem extends StatelessWidget {
       child: ListTile(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         leading: CircleAvatar(backgroundImage: NetworkImage(imageUrl)),
-        title: Text(title,style: TextStyle(
+        title: Text(name,style: TextStyle(
             fontFamily: 'Mina Regular', color: Colors.black, fontSize: 16),),
-        subtitle: Text(unit, style: TextStyle(
-            fontFamily: 'Mina Regular', color: Colors.black, fontSize: 16),),
+        subtitle: Text(DateFormat.yMd()
+            .add_jm()
+            .format(created_at)
+            .toString(), style: TextStyle(
+            fontFamily: 'Mina Regular', color: Colors.black, fontSize: 10),),
         trailing: Container(
           width: 180,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text(price.toStringAsFixed(2),style: TextStyle(
-                  fontFamily: 'Mina Regular', color: Colors.black, fontSize: 16),),
+              Text(address,style: TextStyle(
+                  fontFamily: 'Mina Regular', color: Colors.black, fontSize: 14),),
               IconButton(
                 onPressed: () {
                   Navigator.of(context)
-                      .pushNamed(EditProductScreen.routeName, arguments: id);
+                      .pushNamed(EditShopScreen.routeName, arguments: id);
                 },
                 icon: Icon(Icons.edit),
                 color: Colors.black,
@@ -42,8 +51,8 @@ class ProductItem extends StatelessWidget {
               IconButton(
                 onPressed: () async {
                   try {
-                    showDialog(context: context, builder: (ctx) => AlertDialog(
-                      title: Text("আপনি কি পণ্যটি একেবারে মুছে দিতে চান ?",
+                    await showDialog(context: context, builder: (ctx) => AlertDialog(
+                      title: Text("আপনি কি দোকানটি একেবারে মুছে দিতে চান ?",
                         style: TextStyle(
                             fontFamily: 'Mina Regular', color: Colors.black, fontSize: 18),
                       ),
@@ -56,9 +65,10 @@ class ProductItem extends StatelessWidget {
                             child: Text("না" ,style: TextStyle(
                                 fontFamily: 'Mina Regular', color: Colors.greenAccent, fontSize: 18))),
                         TextButton(
-                            onPressed: () {
-                              Provider.of<Products>(context, listen: false)
-                                  .deleteProduct(id);
+                            onPressed: () async {
+                            await Provider.of<Shops>(context, listen: false)
+                                  .deleteShop(id);
+                            Navigator.of(ctx).pop();
                             },
                             child: Text("হ্যাঁ",style: TextStyle(
                                 fontFamily: 'Mina Regular', color: Colors.redAccent, fontSize: 18)))

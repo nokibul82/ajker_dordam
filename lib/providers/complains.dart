@@ -14,7 +14,7 @@ class Complain with ChangeNotifier {
   final String shopAddress;
   String receiptImageUrl;
   String description;
-  String dateTime;
+  DateTime dateTime;
 
   Complain(
       {@required this.id,
@@ -23,8 +23,8 @@ class Complain with ChangeNotifier {
       @required this.shopImageUrl,
       @required this.shopAddress,
       @required this.description,
-      @required this.receiptImageUrl,
-      @required this.dateTime});
+      this.receiptImageUrl,
+      this.dateTime});
 }
 
 class Complains with ChangeNotifier {
@@ -74,11 +74,9 @@ class Complains with ChangeNotifier {
             shopImageUrl: complainData['shopImageUrl'],
             receiptImageUrl: complainData['receiptImageUrl'],
             description: complainData['description'],
-            dateTime: DateFormat.yMd()
-                .add_jm()
-                .format(DateTime.parse(complainData['dateTime']))
-                .toString()));
+            dateTime: DateTime.parse(complainData['dateTime'])));
       });
+
       _items = loadedComplains;
       notifyListeners();
     } catch (error) {
@@ -87,7 +85,7 @@ class Complains with ChangeNotifier {
   }
 
   Future<void> addComplain() async {
-    String dateTime = DateTime.now().toIso8601String();
+    DateTime dateTime = DateTime.now();
 
     final url = Uri.parse(
         'https://ajker-dordam-default-rtdb.asia-southeast1.firebasedatabase.app/complains.json');

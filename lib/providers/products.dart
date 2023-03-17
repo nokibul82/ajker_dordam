@@ -150,7 +150,7 @@ class Products with ChangeNotifier {
             body: json.encode({
               'title': product.title,
               'unit': product.unit,
-              'price': product.price.toDouble(),
+              'price': product.price,
               'description': product.description,
               'imageUrl': product.imageUrl
             }));

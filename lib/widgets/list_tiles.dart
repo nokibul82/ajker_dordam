@@ -7,6 +7,7 @@ import '../providers/products.dart';
 class ListTiles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Provider.of<Products>(context).fetchAndSetProducts();
     final productData = Provider.of<Products>(context).items;
     return ListView.builder(
       itemBuilder: (ctx, index) => ChangeNotifierProvider.value(

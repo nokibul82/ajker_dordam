@@ -22,7 +22,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   Product(id: null, title: "",unit: "", price: 0,description: "", imageUrl: "");
   var _isInit = true;
   var initValues = {
-    'id': "",
+    'id': '',
     'title': '',
     'unit':'',
     'price': '',

@@ -1,6 +1,9 @@
 import 'package:ajker_dordam/screens/edit_product_screen.dart';
 import 'package:ajker_dordam/screens/complain_history_screen.dart';
 import 'package:ajker_dordam/screens/complain_success_screen.dart';
+import 'package:ajker_dordam/screens/edit_shop_screen.dart';
+import 'package:ajker_dordam/screens/upload_image_get_url.dart';
+import 'package:ajker_dordam/screens/user_shops_screen.dart';
 import 'package:ajker_dordam/screens/users_products_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -47,7 +50,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primaryColor: backColor,
         ),
-        home: ComplainScreen(),
+        home: ProductsOverviewScreen(),
         routes: {
           ProductsOverviewScreen.routeName: (context) => ProductsOverviewScreen(),
           BazarListScreen.routeName: (context) => BazarListScreen(),
@@ -58,7 +61,10 @@ class MyApp extends StatelessWidget {
           ComplainSuccessScreen.routeName: (context) => ComplainSuccessScreen(),
           ComplainHistoryScreen.routeName: (context) => ComplainHistoryScreen(),
           UserProductsScreen.routeName: (context) => UserProductsScreen(),
-          EditProductScreen.routeName: (context) => EditProductScreen()
+          UserShopsScreen.routeName: (context) => UserShopsScreen(),
+          EditProductScreen.routeName: (context) => EditProductScreen(),
+          EditShopScreen.routeName: (context) => EditShopScreen(),
+          UploadImageGetUrl.routeName: (context) => UploadImageGetUrl()
         },
         debugShowCheckedModeBanner: false,
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
+import 'dart:core';
 
 import '../widgets/qrscanneroverlay.dart';
 import './complain_screen.dart';
@@ -19,10 +20,10 @@ class ScannerScreen extends StatefulWidget {
 class _ScannerScreenState extends State<ScannerScreen> {
 
   MobileScannerController cameraController = MobileScannerController();
-  var _complain = Complain(id: DateTime.now().toString(), shopId: "", shopName: "", shopImageUrl: "", description: "", receiptImageUrl: "");
+  var _complain = Complain(id: DateTime.now().toString(), shopId: "", shopName: "", shopImageUrl: "",shopAddress: "", description: "", receiptImageUrl: "");
 
-  void findShop(Shops shops, String code, BuildContext context){
-    final Shop shop = shops.findShop(code);
+  void findShop(String code, BuildContext context){
+    final Shop shop = Provider.of<Shops>(context, listen: false).findShop(code);
     if (shop != null) {
       showDialog(
           context: context,
@@ -56,7 +57,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
                     fadeInCurve: Curves.bounceIn,
                     placeholder:
                     AssetImage('assets/images/placeholder.png'),
-                    image: NetworkImage(shop.imageURL),
+                    image: NetworkImage(shop.imageUrl),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -66,7 +67,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
             actions: [
               TextButton(
                   onPressed: () {
-                    _complain = Complain(id: "", shopId: shop.id, shopName: shop.name, shopImageUrl: shop.imageURL, shopAddress: shop.address,description: "", receiptImageUrl: "", dateTime: "");
+                    _complain = Complain(id: "", shopId: shop.id, shopName: shop.name, shopImageUrl: shop.imageUrl, shopAddress: shop.address,description: "", receiptImageUrl: "");
                     Provider.of<Complains>(context,listen: false).setTemporaryComplain(_complain);
                     Navigator.of(context).pushReplacementNamed(ImagePickerScreen.routeName);
                   },
@@ -92,7 +93,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
                   )),
             ],
           ));
-    } else {
+    }
+    else {
       showDialog(
           context: context,
           builder: (BuildContext context) => AlertDialog(
@@ -113,7 +115,6 @@ class _ScannerScreenState extends State<ScannerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final shops = Provider.of<Shops>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
@@ -172,7 +173,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
             controller: cameraController,
             onDetect: (barcode, args) async {
               final String code = barcode.rawValue.toString();
-              findShop(shops, code,context);
+              print("================= ${code} =================");
+              findShop(code,context);
             }),
         QRScannerOverlay(overlayColour: Colors.black.withOpacity(0.5))
       ]),

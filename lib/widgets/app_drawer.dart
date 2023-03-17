@@ -1,3 +1,4 @@
+import 'package:ajker_dordam/screens/upload_image_get_url.dart';
 import 'package:flutter/material.dart';
 import '../screens/products_overview_screen.dart';
 import '../screens/complain_screen.dart';
@@ -72,6 +73,15 @@ class AppDrawer extends StatelessWidget {
             },
             leading: Icon(Icons.add_business),
             title: Text("দোকান যোগ / হালনাগাদ"),
+          ),
+          Divider(thickness: 2, height: 5),
+          ListTile(
+            onTap: () {
+              Navigator.of(context)
+                  .pushReplacementNamed(UploadImageGetUrl.routeName);
+            },
+            leading: Icon(Icons.file_upload_outlined),
+            title: Text("ছবি আপলোড"),
           ),
           Divider(thickness: 2, height: 5),
           ListTile(
