@@ -2,7 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:widgets_to_image/widgets_to_image.dart';
 
 class Shop with ChangeNotifier {
   final String id;
@@ -35,7 +40,14 @@ class Shops with ChangeNotifier {
     //     address: "যাত্রাবাড়ী,ঢাকা",
     //     imageUrl:
     //         "https://drive.google.com/uc?export=view&id=1muKQHh9JORmrYqTu4Dx0lMDbx5NM2OM7",
-    //     created_at: DateTime.now())
+    //     created_at: DateTime.now()),
+  //  Shop(
+  //     id: "shop2",
+  //     name: "কুমিল্লা স্টোর",
+  //     address: "কুমিল্লা",
+  //     imageUrl:
+  //         "https://drive.google.com/uc?export=view&id=1muKQHh9JORmrYqTu4Dx0lMDbx5NM2OM7",
+  //     created_at: DateTime.now()),
   ];
 
   List<Shop> get items {
@@ -77,8 +89,8 @@ class Shops with ChangeNotifier {
           "=================== ${error} ==============\n =============== Error from fetchAndSetShops Method");
     }
   }
-
-  Future<void> addShop(Shop newShop) async {
+  final widgetsToImageController = WidgetsToImageController();
+  Future<void> addShop(Shop newShop, BuildContext context) async {
     final url = Uri.parse(
         'https://ajker-dordam-default-rtdb.asia-southeast1.firebasedatabase.app/shops.json');
     final DateTime createdAt = DateTime.now();

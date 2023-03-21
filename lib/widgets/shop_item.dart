@@ -39,7 +39,7 @@ class ShopItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(address,style: TextStyle(
-                  fontFamily: 'Mina Regular', color: Colors.black, fontSize: 14),),
+                  fontFamily: 'Mina Regular', color: Colors.black, fontSize: 10),),
               IconButton(
                 onPressed: () {
                   Navigator.of(context)

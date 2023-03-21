@@ -4,11 +4,21 @@ import '../main.dart';
 import './tile_item.dart';
 import '../providers/products.dart';
 
-class ListTiles extends StatelessWidget {
+class ListTiles extends StatefulWidget {
+  @override
+  State<ListTiles> createState() => _ListTilesState();
+}
+
+class _ListTilesState extends State<ListTiles> {
+
+  List<Product> productData;
+
+
   @override
   Widget build(BuildContext context) {
     Provider.of<Products>(context).fetchAndSetProducts();
-    final productData = Provider.of<Products>(context).items;
+    productData = Provider.of<Products>(context).items;
+    List<Product> displayData = List.from(productData);
     return ListView.builder(
       itemBuilder: (ctx, index) => ChangeNotifierProvider.value(
         value: productData[index],

@@ -25,7 +25,7 @@ class ProductsOverviewScreen extends StatelessWidget {
           ),
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.search_sharp)),
+          //IconButton(onPressed: () {}, icon: Icon(Icons.search_sharp)),
           IconButton(
               onPressed: () {
                 Navigator.of(context).pushNamed(BazarListScreen.routeName);

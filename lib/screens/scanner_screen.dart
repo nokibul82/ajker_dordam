@@ -7,7 +7,6 @@ import '../widgets/qrscanneroverlay.dart';
 import './complain_screen.dart';
 import './image_picker_screen.dart';
 
-
 import '../providers/shops.dart';
 import '../providers/complains.dart';
 

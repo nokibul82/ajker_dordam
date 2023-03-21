@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:widgets_to_image/widgets_to_image.dart';
+
 import '../providers/shops.dart';
+import './qr_generate_screen.dart';
 
 class EditShopScreen extends StatefulWidget {
   static const routeName = "/editShopScreen";
-
   @override
   State<EditShopScreen> createState() => _EditShopScreenState();
 }
@@ -15,12 +14,10 @@ class _EditShopScreenState extends State<EditShopScreen> {
   final _addressFocusNode = FocusNode();
   final _imageUrlFocusNode = FocusNode();
   final _imageUrlController = TextEditingController();
-  final widgetsToImageController = WidgetsToImageController();
   final _from = GlobalKey<FormState>();
   var _editedShop = Shop(id: null, name: "", address: "", imageUrl: "");
   var _isInit = true;
   var initValues = {'id': '', 'name': '', 'address': '', 'imageUrl': ''};
-
   var _isLoading = false;
 
   @override
@@ -79,24 +76,24 @@ class _EditShopScreenState extends State<EditShopScreen> {
           .updateShop(_editedShop.id, _editedShop);
     } else {
       try {
-        await Provider.of<Shops>(context, listen: false).addShop(_editedShop);
+        await Provider.of<Shops>(context, listen: false).addShop(_editedShop,context);
       } catch (error) {
         await showDialog(
             context: context,
             builder: (ctx) {
               return AlertDialog(
-                title: Text("An error occurred"),
-                content: Text("Something went wrong !"),
-                actions: [
-                  TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text("Okay"))
-                ],
-              );
+                  title: Text("An error occurred"),
+                  content: Text("Something went wrong !"),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("Okay"))
+                  ]);
             });
       }
+      await Navigator.of(context).pushNamed(QrGenerateScreen.routeName);
     }
     setState(() {
       _isLoading = false;
@@ -226,7 +223,7 @@ class _EditShopScreenState extends State<EditShopScreen> {
                               ),
                             )
                           ],
-                        )
+                        ),
                       ],
                     )),
               ));

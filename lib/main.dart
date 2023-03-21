@@ -1,13 +1,19 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 import 'package:ajker_dordam/screens/edit_product_screen.dart';
 import 'package:ajker_dordam/screens/complain_history_screen.dart';
 import 'package:ajker_dordam/screens/complain_success_screen.dart';
 import 'package:ajker_dordam/screens/edit_shop_screen.dart';
+import 'package:ajker_dordam/screens/login_screen.dart';
+
+import './screens/qr_generate_screen.dart';
 import 'package:ajker_dordam/screens/upload_image_get_url.dart';
 import 'package:ajker_dordam/screens/user_shops_screen.dart';
 import 'package:ajker_dordam/screens/users_products_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 
 import './providers/products.dart';
 import './providers/bazar_list.dart';
@@ -21,11 +27,11 @@ import './screens/products_overview_screen.dart';
 import './screens/bazar_list_screen.dart';
 import './screens/scanner_screen.dart';
 
+import './models/auth.dart';
 
-enum UserRole {
+enum Role {
   admin,
-  customer,
-  shopkeeper
+  customer
 }
 
 Future main() async{
@@ -35,6 +41,9 @@ Future main() async{
 }
 
 class MyApp extends StatelessWidget {
+
+  final User user = Auth().currentUser;
+
   static Color backColor = Color(0xff57dddd);
   @override
   Widget build(BuildContext context) {
@@ -50,7 +59,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primaryColor: backColor,
         ),
-        home: ProductsOverviewScreen(),
+        home: MyHomePage(),
         routes: {
           ProductsOverviewScreen.routeName: (context) => ProductsOverviewScreen(),
           BazarListScreen.routeName: (context) => BazarListScreen(),
@@ -64,7 +73,8 @@ class MyApp extends StatelessWidget {
           UserShopsScreen.routeName: (context) => UserShopsScreen(),
           EditProductScreen.routeName: (context) => EditProductScreen(),
           EditShopScreen.routeName: (context) => EditShopScreen(),
-          UploadImageGetUrl.routeName: (context) => UploadImageGetUrl()
+          UploadImageGetUrl.routeName: (context) => UploadImageGetUrl(),
+          QrGenerateScreen.routeName: (context) => QrGenerateScreen()
         },
         debugShowCheckedModeBanner: false,
       ),
@@ -75,11 +85,8 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Ajker Dordam"),
-      ),
-      body: Center(child: Text("Lets\'s build an app")),
-    );
+    return StreamBuilder(stream: Auth().authStateChanges,builder: (context, snapshot){
+      return snapshot.hasData ? ProductsOverviewScreen() :LoginScreen();
+    });
   }
 }

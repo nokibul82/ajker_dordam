@@ -52,6 +52,7 @@ class BazarList with ChangeNotifier{
               id: DateTime.now().toString(),
               title: title,
               quantity: 1,
+              unit: "1",
               price: price));
     }
     notifyListeners();
