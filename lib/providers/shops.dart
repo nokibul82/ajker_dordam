@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:widgets_to_image/widgets_to_image.dart';
+
 
 class Shop with ChangeNotifier {
   final String id;
@@ -54,6 +52,8 @@ class Shops with ChangeNotifier {
     return [..._items];
   }
 
+  String _imageUrl;
+
   Shop findShop(String id){
     try{
       return _items.firstWhere((element) => element.id == id);
@@ -89,8 +89,9 @@ class Shops with ChangeNotifier {
           "=================== ${error} ==============\n =============== Error from fetchAndSetShops Method");
     }
   }
-  final widgetsToImageController = WidgetsToImageController();
-  Future<void> addShop(Shop newShop, BuildContext context) async {
+
+
+  Future<void> addShop(Shop newShop) async {
     final url = Uri.parse(
         'https://ajker-dordam-default-rtdb.asia-southeast1.firebasedatabase.app/shops.json');
     final DateTime createdAt = DateTime.now();
@@ -99,7 +100,7 @@ class Shops with ChangeNotifier {
           body: json.encode({
             'name': newShop.name,
             'address': newShop.address,
-            'imageUrl': newShop.imageUrl,
+            'imageUrl': _imageUrl,
             'created_at': createdAt.toIso8601String()
           }));
       print('==================== SHOP POST DONE=================');
@@ -107,9 +108,10 @@ class Shops with ChangeNotifier {
           id: json.decode(response.body)['name'],
           name: newShop.name,
           address: newShop.address,
-          imageUrl: newShop.imageUrl,
+          imageUrl: _imageUrl,
           created_at: createdAt);
       _items.add(uploadedShop);
+      _imageUrl = "";
       notifyListeners();
     } catch (error) {
       print(
@@ -127,13 +129,15 @@ class Shops with ChangeNotifier {
         body: json.encode({
           'name': shop.name,
           'address': shop.address,
-          'imageUrl': shop.imageUrl
+          'imageUrl':_imageUrl.isEmpty ? shop.imageUrl : _imageUrl
         })
         );
       } catch (error) {
         print(
             "=================== ${error} ==============\n =============== Error from \'updateShop\' Method");
       }
+      _items[shopIndex] = shop;
+      notifyListeners();
     } else {
       print(
           "=====================  No ID FOUND in updateShop METHOD =================================");
@@ -152,7 +156,27 @@ class Shops with ChangeNotifier {
       _items.insert(existingShopIndex, existingShop);
       notifyListeners();
       throw HttpException("Could not delete Shop in deleteShop function.");
-    }
+    } else FirebaseStorage.instance.refFromURL(existingShop.imageUrl);
     existingShop = null;
+  }
+
+
+  Future<void> uploadImage(File image,File name) async {
+    final path = 'images/${name}';
+    final file = image;
+
+    try {
+      final ref = FirebaseStorage.instance.ref().child(path);
+
+      UploadTask uploadTask = ref.putFile(file);
+
+      final snapshot = await uploadTask.whenComplete(() {});
+
+      _imageUrl = await snapshot.ref.getDownloadURL();
+
+      notifyListeners();
+    } catch (error) {
+      print(error + "\nError from product upload Image method ");
+    }
   }
 }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 
 
 class ComplainItem extends StatelessWidget {
   final String shopName;
-  final String dateTime;
+  final DateTime dateTime;
   final String shopImageUrl;
   final String shopAddress;
   const ComplainItem(this.shopName, this.shopImageUrl,this.shopAddress, this.dateTime);
@@ -15,9 +16,15 @@ class ComplainItem extends StatelessWidget {
       child: ListTile(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         leading: CircleAvatar(backgroundImage: NetworkImage(shopImageUrl)),
-        title: Text(shopName),
-        subtitle: Text(dateTime),
-        trailing: Text(shopAddress),
+        title: Text(shopName,style: TextStyle(
+            fontFamily: 'Mina Regular', color: Colors.black, fontSize: 16)),
+        subtitle: Text(DateFormat.yMd()
+            .add_jm()
+            .format(dateTime)
+            .toString(),style: TextStyle(
+            fontFamily: 'Mina Regular', color: Colors.black, fontSize: 10)),
+        trailing: Text(shopAddress,style: TextStyle(
+            fontFamily: 'Mina Regular', color: Colors.black, fontSize: 10)),
       ),
     );
   }

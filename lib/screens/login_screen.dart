@@ -44,20 +44,31 @@ class _LoginScreenState extends State<LoginScreen> {
       final password = _passwordController.text;
       final name = _nameController.text;
       final phone = _phoneController.text;
+      final user = "customer";
       await Auth()
-          .createUserWithEmailAndPassword(email: email, password: password);
-      await postDetailsToFirestore(name,email,phone);
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .whenComplete(() => postDetailsToFirestore(name, email, phone, user,Auth().currentUser));
     } on FirebaseAuthException catch (e) {
       setState(() {
         errorMessage = e.message;
+        print("${e} =========== error in create user Method ===============");
       });
     }
   }
 
-  Future<void> postDetailsToFirestore(String name,String email,String phone) async {
-    var user = Auth().currentUser;
-    CollectionReference ref = FirebaseFirestore.instance.collection("users");
-    await ref.doc(user.uid).set({'email': email,'name': name,'phone':phone});
+  Future<void> postDetailsToFirestore(
+      String name, String email, String phone, String user, User currentUser) async {
+    try {
+      CollectionReference ref = FirebaseFirestore.instance.collection("users");
+      await ref
+          .doc(currentUser.uid)
+          .set({'email': email, 'name': name, 'phone': phone, 'user': user});
+    } catch (e) {
+      setState(() {
+        errorMessage = e.message;
+        print("${e} =========== error in post details Method ===============");
+      });
+    }
   }
 
   Widget _tittle() {
@@ -100,7 +111,9 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       },
       child: Text(
-        _isLogin ? "Don't have account? Register Instead" : "Have account? Login Instead.",
+        _isLogin
+            ? "Don't have account? Register Instead"
+            : "Have account? Login Instead.",
         style: TextStyle(fontFamily: 'Mina Regular'),
       ),
       style: TextButton.styleFrom(
@@ -108,7 +121,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
 
   Widget _nameTextField() {
     return TextField(
@@ -119,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
           hintText: 'Name',
           enabled: true,
           contentPadding:
-          const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+              const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
           focusedBorder: OutlineInputBorder(
             borderSide: new BorderSide(color: Theme.of(context).primaryColor),
             borderRadius: new BorderRadius.circular(10),
@@ -131,6 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
       keyboardType: TextInputType.name,
     );
   }
+
   Widget _phoneTextField() {
     return TextField(
       controller: _phoneController,
@@ -140,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
           hintText: 'Phone Number',
           enabled: true,
           contentPadding:
-          const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+              const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
           focusedBorder: OutlineInputBorder(
             borderSide: new BorderSide(color: Theme.of(context).primaryColor),
             borderRadius: new BorderRadius.circular(10),
@@ -152,6 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
       keyboardType: TextInputType.number,
     );
   }
+
   Widget _emailTextField() {
     return TextField(
       controller: _emailController,
@@ -161,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
           hintText: 'Email',
           enabled: true,
           contentPadding:
-          const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+              const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
           focusedBorder: OutlineInputBorder(
             borderSide: new BorderSide(color: Theme.of(context).primaryColor),
             borderRadius: new BorderRadius.circular(10),
@@ -173,6 +187,7 @@ class _LoginScreenState extends State<LoginScreen> {
       keyboardType: TextInputType.emailAddress,
     );
   }
+
   Widget _passwordTextField() {
     return TextField(
       controller: _passwordController,
@@ -206,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       children: [
         _emailTextField(),
-        SizedBox(height: 3),//email
+        SizedBox(height: 3), //email
         _passwordTextField(), //password
       ],
     );
@@ -230,7 +245,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 40,horizontal: 20),
+        padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

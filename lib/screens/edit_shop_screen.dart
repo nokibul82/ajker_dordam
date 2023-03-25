@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../main.dart';
 import '../providers/shops.dart';
 import './qr_generate_screen.dart';
 
@@ -12,17 +17,19 @@ class EditShopScreen extends StatefulWidget {
 
 class _EditShopScreenState extends State<EditShopScreen> {
   final _addressFocusNode = FocusNode();
-  final _imageUrlFocusNode = FocusNode();
-  final _imageUrlController = TextEditingController();
   final _from = GlobalKey<FormState>();
   var _editedShop = Shop(id: null, name: "", address: "", imageUrl: "");
-  var _isInit = true;
   var initValues = {'id': '', 'name': '', 'address': '', 'imageUrl': ''};
+
+  File name;
+  File image;
+
+  var _isInit = true;
   var _isLoading = false;
+  var _imageSelected = false;
 
   @override
   void initState() {
-    _imageUrlFocusNode.addListener(_updateImageURL);
     super.initState();
   }
 
@@ -36,32 +43,35 @@ class _EditShopScreenState extends State<EditShopScreen> {
         initValues = {
           'name': _editedShop.name,
           'address': _editedShop.address,
-          'imageUrl': ''
+          'imageUrl': _editedShop.imageUrl
         };
-        _imageUrlController.text = _editedShop.imageUrl;
       }
     }
     _isInit = false;
     super.didChangeDependencies();
   }
 
-  @override
-  void dispose() {
-    _imageUrlFocusNode.removeListener(_updateImageURL);
-    _addressFocusNode.dispose();
-    _imageUrlFocusNode.dispose();
-    _imageUrlController.dispose();
-    super.dispose();
+  Future<void> pickImage(ImageSource source) async {
+    try {
+      final image = await ImagePicker().pickImage(source: source);
+      if (image == null) return;
+
+      final tempPath = File(image.path);
+      final tempName = File(image.name);
+      setState(() {
+        this.image = tempPath;
+        this.name = tempName;
+        _imageSelected = true;
+      });
+    } on PlatformException catch (e) {
+      print(e);
+    }
   }
 
-  void _updateImageURL() {
-    if (!_imageUrlFocusNode.hasFocus) {
-      if (!_imageUrlController.text.startsWith("http") &&
-          !_imageUrlController.text.startsWith("https")) {
-        return;
-      }
-      setState(() {});
-    }
+  @override
+  void dispose() {
+    _addressFocusNode.dispose();
+    super.dispose();
   }
 
   Future<void> _saveForm() async {
@@ -72,11 +82,27 @@ class _EditShopScreenState extends State<EditShopScreen> {
       _isLoading = true;
     });
     if (_editedShop.id != null) {
+      if (_imageSelected) {
+        await Provider.of<Shops>(context, listen: false)
+            .uploadImage(image, name);
+      }
       await Provider.of<Shops>(context, listen: false)
           .updateShop(_editedShop.id, _editedShop);
     } else {
       try {
-        await Provider.of<Shops>(context, listen: false).addShop(_editedShop,context);
+        if (_imageSelected) {
+          await Provider.of<Shops>(context, listen: false)
+              .uploadImage(image, name);
+        } else {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("Please Choose Image")));
+          setState(() {
+            _isLoading = false;
+          });
+          return;
+        }
+        await Provider.of<Shops>(context, listen: false).addShop(_editedShop);
       } catch (error) {
         await showDialog(
             context: context,
@@ -151,14 +177,11 @@ class _EditShopScreenState extends State<EditShopScreen> {
                                 imageUrl: _editedShop.imageUrl);
                           },
                         ),
+                        SizedBox(height: 10,),
                         TextFormField(
                           initialValue: initValues['address'],
                           decoration: InputDecoration(labelText: "Address"),
                           textInputAction: TextInputAction.next,
-                          onFieldSubmitted: (_) {
-                            FocusScope.of(context)
-                                .requestFocus(_imageUrlFocusNode);
-                          },
                           validator: (value) {
                             if (value.isEmpty) {
                               return "Please give some proper value";
@@ -173,57 +196,136 @@ class _EditShopScreenState extends State<EditShopScreen> {
                                 imageUrl: _editedShop.imageUrl);
                           },
                         ),
+                        SizedBox(height: 10,),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Container(
-                              height: 100,
-                              width: 100,
-                              margin: EdgeInsets.only(top: 80, right: 10),
-                              decoration: BoxDecoration(
-                                  border:
-                                      Border.all(width: 1, color: Colors.grey)),
-                              child: _imageUrlController.text.isEmpty
-                                  ? Text("No URL Given")
-                                  : FittedBox(
-                                      child: Image.network(
-                                        _imageUrlController.text,
-                                        fit: BoxFit.cover,
+                                height: MediaQuery.of(context).size.width * 0.4,
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                margin: EdgeInsets.only(top: 80, right: 10),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 1, color: Colors.grey)),
+                                child: Center(
+                                  child: image == null &&
+                                          initValues['imageUrl'].isEmpty && !_imageSelected
+                                      ? Text(
+                                          "Choose an image",
+                                          textAlign: TextAlign.center,
+                                        )
+                                      : FittedBox(
+                                          child: FadeInImage(
+                                              placeholder: AssetImage(
+                                                  'assets/images/placeholder.png'),
+                                              image: _editedShop
+                                                      .imageUrl.isNotEmpty && !_imageSelected
+                                                  ? NetworkImage(
+                                                      initValues['imageUrl'])
+                                                  : FileImage(image)),
+                                        ),
+                                )),
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.12,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.65,
+                                    child: Card(
+                                      elevation: 10,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                      ),
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          pickImage(ImageSource.camera);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          primary: MyApp.backColor,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(18.0),
+                                          ),
+                                        ),
+                                        child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                "ছবি তুলুন",
+                                                style: TextStyle(
+                                                    fontFamily: 'Mina Regular',
+                                                    color: Colors.black,
+                                                    fontSize: 20),
+                                              ),
+                                              SizedBox(width: 5),
+                                              Icon(
+                                                Icons.camera_alt_rounded,
+                                                color: Colors.black,
+                                                size: 20,
+                                              ),
+                                            ]),
                                       ),
                                     ),
-                            ),
-                            Expanded(
-                              child: TextFormField(
-                                decoration:
-                                    InputDecoration(labelText: "Image URL"),
-                                keyboardType: TextInputType.url,
-                                textInputAction: TextInputAction.done,
-                                controller: _imageUrlController,
-                                focusNode: _imageUrlFocusNode,
-                                onFieldSubmitted: (_) {
-                                  _saveForm();
-                                },
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return "Please give some proper value";
-                                  }
-                                  if (!value.startsWith("http") ||
-                                      !value.startsWith("https")) {
-                                    return "Please enter a valid URL";
-                                  }
-                                  return null;
-                                },
-                                onSaved: (value) {
-                                  _editedShop = Shop(
-                                      id: _editedShop.id,
-                                      name: _editedShop.name,
-                                      address: _editedShop.address,
-                                      imageUrl: value);
-                                },
+                                  ),
+                                  SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.01),
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.12,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.65,
+                                    child: Card(
+                                      elevation: 10,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                      ),
+                                      child: OutlinedButton(
+                                        onPressed: () {
+                                          pickImage(ImageSource.gallery);
+                                        },
+                                        style: OutlinedButton.styleFrom(
+                                            side: BorderSide(
+                                                width: 2, color: Colors.black),
+                                            primary: MyApp.backColor,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(18.0),
+                                            )),
+                                        child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                "গ্যালারি থেকে",
+                                                style: TextStyle(
+                                                    fontFamily: 'Mina Regular',
+                                                    color: Colors.black,
+                                                    fontSize: 20),
+                                              ),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+                                              Icon(
+                                                Icons.image_rounded,
+                                                color: Colors.black,
+                                                size: 20,
+                                              ),
+                                            ]),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             )
                           ],
-                        ),
+                        )
                       ],
                     )),
               ));

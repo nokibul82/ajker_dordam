@@ -38,49 +38,55 @@ class ShopItem extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text(address,style: TextStyle(
-                  fontFamily: 'Mina Regular', color: Colors.black, fontSize: 10),),
-              IconButton(
-                onPressed: () {
-                  Navigator.of(context)
-                      .pushNamed(EditShopScreen.routeName, arguments: id);
-                },
-                icon: Icon(Icons.edit),
-                color: Colors.black,
+              Expanded(
+                child: Text(address,softWrap: true,style: TextStyle(
+                    fontFamily: 'Mina Regular', color: Colors.black, fontSize: 10),),
               ),
-              IconButton(
-                onPressed: () async {
-                  try {
-                    await showDialog(context: context, builder: (ctx) => AlertDialog(
-                      title: Text("আপনি কি দোকানটি একেবারে মুছে দিতে চান ?",
-                        style: TextStyle(
-                            fontFamily: 'Mina Regular', color: Colors.black, fontSize: 18),
-                      ),
-                      content: Text(""),
-                      actions: [
-                        TextButton(
-                            onPressed: () {
+              Expanded(
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushNamed(EditShopScreen.routeName, arguments: id);
+                  },
+                  icon: Icon(Icons.edit),
+                  color: Colors.black,
+                ),
+              ),
+              Expanded(
+                child: IconButton(
+                  onPressed: () async {
+                    try {
+                      await showDialog(context: context, builder: (ctx) => AlertDialog(
+                        title: Text("আপনি কি দোকানটি একেবারে মুছে দিতে চান ?",
+                          style: TextStyle(
+                              fontFamily: 'Mina Regular', color: Colors.black, fontSize: 18),
+                        ),
+                        content: Text(""),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(ctx).pop();
+                              },
+                              child: Text("না" ,style: TextStyle(
+                                  fontFamily: 'Mina Regular', color: Colors.greenAccent, fontSize: 18))),
+                          TextButton(
+                              onPressed: () async {
+                              await Provider.of<Shops>(context, listen: false)
+                                    .deleteShop(id);
                               Navigator.of(ctx).pop();
-                            },
-                            child: Text("না" ,style: TextStyle(
-                                fontFamily: 'Mina Regular', color: Colors.greenAccent, fontSize: 18))),
-                        TextButton(
-                            onPressed: () async {
-                            await Provider.of<Shops>(context, listen: false)
-                                  .deleteShop(id);
-                            Navigator.of(ctx).pop();
-                            },
-                            child: Text("হ্যাঁ",style: TextStyle(
-                                fontFamily: 'Mina Regular', color: Colors.redAccent, fontSize: 18)))
-                      ],
-                    ));
-                  } catch (error) {
-                    scaffold
-                        .showSnackBar(SnackBar(content: Text("Deleting Failed")));
-                  }
-                },
-                icon: Icon(Icons.delete),
-                color: Colors.redAccent,
+                              },
+                              child: Text("হ্যাঁ",style: TextStyle(
+                                  fontFamily: 'Mina Regular', color: Colors.redAccent, fontSize: 18)))
+                        ],
+                      ));
+                    } catch (error) {
+                      scaffold
+                          .showSnackBar(SnackBar(content: Text("Deleting Failed")));
+                    }
+                  },
+                  icon: Icon(Icons.delete),
+                  color: Colors.redAccent,
+                ),
               )
             ],
           ),

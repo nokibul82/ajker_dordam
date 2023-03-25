@@ -35,7 +35,7 @@ class BazarListScreen extends StatelessWidget {
                   Spacer(),
                   Chip(
                     label: Text(
-                      '\$${bazarList.totalAmount}',
+                      '৳ ${bazarList.totalAmount}',
                       style: TextStyle(color: Colors.white),
                     ),
                     backgroundColor: Theme.of(context).primaryColor,

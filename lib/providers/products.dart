@@ -1,6 +1,9 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:io';
+
 import '../models/http_exception.dart';
 
 class Product with ChangeNotifier {
@@ -18,7 +21,7 @@ class Product with ChangeNotifier {
     @required this.description,
     @required this.price,
     @required this.unit,
-    @required this.imageUrl,
+    this.imageUrl,
     this.created_at,
   });
 }
@@ -79,6 +82,8 @@ class Products with ChangeNotifier {
     return [..._items];
   }
 
+  String _imageUrl;
+
   Product findById(String id) {
     return _items.firstWhere((element) => element.id == id);
   }
@@ -120,19 +125,21 @@ class Products with ChangeNotifier {
             'unit': newProduct.unit,
             'price': newProduct.price,
             'description': newProduct.description,
-            'imageUrl': newProduct.imageUrl,
+            'imageUrl': _imageUrl,
             'created_at': createdAt.toIso8601String()
           }));
       print('==================== PRODUCT POST DONE=================');
+
       final uploadedProduct = Product(
           id: json.decode(response.body)['name'],
           title: newProduct.title,
           unit: newProduct.unit,
           price: newProduct.price,
           description: newProduct.description,
-          imageUrl: newProduct.imageUrl,
+          imageUrl: _imageUrl,
           created_at: createdAt);
       _items.add(uploadedProduct);
+      _imageUrl = "";
       notifyListeners();
     } catch (error) {
       print(
@@ -152,7 +159,7 @@ class Products with ChangeNotifier {
               'unit': product.unit,
               'price': product.price,
               'description': product.description,
-              'imageUrl': product.imageUrl
+              'imageUrl': _imageUrl.isEmpty ? product.imageUrl : _imageUrl
             }));
       }catch (error) {
         print(
@@ -179,7 +186,26 @@ class Products with ChangeNotifier {
       notifyListeners();
       throw HttpException(
           "Could not delete product in deleteProduct function.");
-    }
+    }else FirebaseStorage.instance.refFromURL(existingProduct.imageUrl).delete();
     existingProduct = null;
+  }
+
+  Future<void> uploadImage(File image,File name) async {
+    final path = 'images/${name}';
+    final file = image;
+
+    try {
+      final ref = FirebaseStorage.instance.ref().child(path);
+
+      UploadTask uploadTask = ref.putFile(file);
+
+      final snapshot = await uploadTask.whenComplete(() {});
+
+      _imageUrl = await snapshot.ref.getDownloadURL();
+
+      notifyListeners();
+    } catch (error) {
+      print(error + "\nError from product upload Image method ");
+    }
   }
 }

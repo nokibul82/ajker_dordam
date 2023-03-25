@@ -65,12 +65,12 @@ class BazarListItem extends StatelessWidget {
                   padding: EdgeInsets.all(2),
                   child: FittedBox(
                       child: Text(
-                    "\$${price}",
+                    "৳ ${price}",
                     style: TextStyle(color: Colors.white),
                   ))),
             ),
             title: Text(title),
-            subtitle: Text('Total \$${(price * quantity)}'),
+            subtitle: Text('Total ৳ ${(price * quantity)}'),
             trailing: SizedBox(
               width: 150,
               height: 20,

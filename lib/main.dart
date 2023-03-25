@@ -1,3 +1,4 @@
+import 'package:ajker_dordam/screens/help_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -74,7 +75,9 @@ class MyApp extends StatelessWidget {
           EditProductScreen.routeName: (context) => EditProductScreen(),
           EditShopScreen.routeName: (context) => EditShopScreen(),
           UploadImageGetUrl.routeName: (context) => UploadImageGetUrl(),
-          QrGenerateScreen.routeName: (context) => QrGenerateScreen()
+          QrGenerateScreen.routeName: (context) => QrGenerateScreen(),
+          MyHomePage.routeName: (context) => MyHomePage(),
+          HelpScreem.routeName: (context) => HelpScreem()
         },
         debugShowCheckedModeBanner: false,
       ),
@@ -83,6 +86,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
+  static String routeName = "/myHomePage";
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(stream: Auth().authStateChanges,builder: (context, snapshot){

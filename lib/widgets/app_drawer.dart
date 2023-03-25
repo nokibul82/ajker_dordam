@@ -1,3 +1,4 @@
+import 'package:ajker_dordam/main.dart';
 import 'package:ajker_dordam/screens/upload_image_get_url.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import '../screens/complain_screen.dart';
 import '../screens/user_shops_screen.dart';
 import '../screens/users_products_screen.dart';
 import '../models/auth.dart';
+import '../screens/help_screen.dart';
 
 class AppDrawer extends StatefulWidget {
   @override
@@ -15,9 +17,11 @@ class AppDrawer extends StatefulWidget {
 
 class _AppDrawerState extends State<AppDrawer> {
   bool _isConsumer = true;
+  bool _isLoading = true;
   var _user = FirebaseAuth.instance.currentUser;
   var userName = "";
-  var phone = "";
+  var userPhone = "";
+  var userEmail = "";
 
   final textStyle =
       new TextStyle(fontFamily: 'Mina Regular', color: Colors.black);
@@ -28,19 +32,23 @@ class _AppDrawerState extends State<AppDrawer> {
     super.initState();
   }
 
-  void applyRole() {
-    var document = FirebaseFirestore.instance
+  void applyRole() async {
+    var document = await FirebaseFirestore.instance
         .collection("users")
         .doc(_user.uid)
         .get()
         .then((DocumentSnapshot snapshot) {
       if (snapshot.exists) {
-        _isConsumer = true;
+        if (snapshot.get('user') == 'customer') {
+          _isConsumer = true;
+        } else {
+          _isConsumer = false;
+        }
         userName = snapshot.get('name');
-      } else {
-        _isConsumer = false;
-        userName = "Admin";
+        userPhone = snapshot.get('phone');
+        userEmail = snapshot.get("email");
       }
+      _isLoading = false;
       setState(() {});
     }).onError((error, stackTrace) {
       print(
@@ -90,15 +98,6 @@ class _AppDrawerState extends State<AppDrawer> {
           leading: Icon(Icons.add_business),
           title: Text("দোকান যোগ / হালনাগাদ", style: textStyle),
         ),
-        Divider(thickness: 2, height: 5),
-        ListTile(
-          onTap: () {
-            Navigator.of(context)
-                .pushReplacementNamed(UploadImageGetUrl.routeName);
-          },
-          leading: Icon(Icons.file_upload_outlined),
-          title: Text("ছবি আপলোড", style: textStyle),
-        ),
       ],
     );
   }
@@ -130,7 +129,7 @@ class _AppDrawerState extends State<AppDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-        child: Column(
+        child: _isLoading ? Center(child: CircularProgressIndicator(color: Theme.of(context).primaryColor,)): Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
@@ -147,8 +146,12 @@ class _AppDrawerState extends State<AppDrawer> {
                 child: CircleAvatar(
                   radius: 90,
                   child: Text(
-                    userName,
-                    style: TextStyle(fontFamily: 'Mina Regular', color: Colors.black,fontSize: 18),
+                    "Hi,\n${userName}",
+                    style: TextStyle(
+                        fontFamily: 'Mina Regular',
+                        color: Colors.black,
+                        fontSize: 18),
+                    textAlign: TextAlign.center,
                   ),
                   backgroundColor: Colors.white,
                 ),
@@ -156,15 +159,27 @@ class _AppDrawerState extends State<AppDrawer> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.email,size: 11,),
-                  Text(_user.email,style: TextStyle(fontFamily: 'Mina Regular', color: Colors.black,fontSize: 10),),
+                  Icon(Icons.email, size: 12),
+                  Text(
+                    userEmail,
+                    style: TextStyle(
+                        fontFamily: 'Mina Regular',
+                        color: Colors.black87,
+                        fontSize: 10),
+                  ),
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.phone,size: 11,),
-                  Text(phone,style: TextStyle(fontFamily: 'Mina Regular', color: Colors.black,fontSize: 10),),
+                  Icon(Icons.phone, size: 12),
+                  Text(
+                    userPhone,
+                    style: TextStyle(
+                        fontFamily: 'Mina Regular',
+                        color: Colors.black87,
+                        fontSize: 10),
+                  ),
                 ],
               )
             ],
@@ -173,17 +188,16 @@ class _AppDrawerState extends State<AppDrawer> {
         _isConsumer ? _consumerOptions() : _adminOptions(),
         Divider(thickness: 2, height: 5),
         ListTile(
-          onTap: () {},
+          onTap: ()  {
+            Navigator.of(context).pushReplacementNamed(HelpScreem.routeName) ;
+          },
           leading: Icon(Icons.help_center_outlined),
           title: Text("সাহায্য", style: textStyle),
         ),
-        Divider(
-          thickness: 2,
-          height: 5,
-        ),
+        Divider(thickness: 2, height: 5),
         ListTile(
-          onTap: () {
-            signOut();
+          onTap: () async {
+           await signOut();
           },
           leading: Icon(Icons.logout),
           title: Text("লগ আউট", style: textStyle),

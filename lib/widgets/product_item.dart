@@ -59,6 +59,7 @@ class ProductItem extends StatelessWidget {
                             onPressed: () {
                               Provider.of<Products>(context, listen: false)
                                   .deleteProduct(id);
+                              Navigator.of(ctx).pop();
                             },
                             child: Text("হ্যাঁ",style: TextStyle(
                                 fontFamily: 'Mina Regular', color: Colors.redAccent, fontSize: 18)))
