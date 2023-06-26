@@ -2,6 +2,8 @@
 <p align="center">
   <img src="https://github.com/nokibul82/ajker_dordam/blob/master/UI%20Screens/Home.png" width="350" title="Home">
   <img src="https://github.com/nokibul82/ajker_dordam/blob/master/UI%20Screens/App Drawer.png" width="350" alt="App Drawer">
+  <img src="https://github.com/nokibul82/ajker_dordam/blob/master/UI%20Screens/bazarList.png" width="350" alt="App Drawer">
+  <img src="https://github.com/nokibul82/ajker_dordam/blob/master/UI%20Screens/confirmShopQR.png" width="350" alt="App Drawer">
 </p>
 
 
