@@ -17,21 +17,21 @@ class Complain with ChangeNotifier {
   DateTime dateTime;
 
   Complain(
-      {@required this.id,
-      @required this.shopId,
-      @required this.shopName,
-      @required this.shopImageUrl,
-      @required this.shopAddress,
-      @required this.description,
-      this.receiptImageUrl,
-      this.dateTime});
+      {required this.id,
+      required this.shopId,
+      required this.shopName,
+      required this.shopImageUrl,
+      required this.shopAddress,
+      required this.description,
+      required this.receiptImageUrl,
+      required this.dateTime});
 }
 
 class Complains with ChangeNotifier {
-  UploadTask _uploadTask;
-  Complain _temporaryComplain;
-  File _name;
-  File _image;
+  late UploadTask _uploadTask;
+  late Complain _temporaryComplain;
+  late File _name;
+  late File _image;
 
   void setName(File value) {
     _name = value;
@@ -133,7 +133,7 @@ class Complains with ChangeNotifier {
       _temporaryComplain.receiptImageUrl = imageUrl;
       notifyListeners();
     } catch (error) {
-      print(error + "\nError from upload Image method ");
+      print("$error \nError from upload Image method ");
     }
   }
 }

@@ -19,10 +19,10 @@ class ScannerScreen extends StatefulWidget {
 class _ScannerScreenState extends State<ScannerScreen> {
 
   MobileScannerController cameraController = MobileScannerController();
-  var _complain = Complain(id: DateTime.now().toString(), shopId: "", shopName: "", shopImageUrl: "",shopAddress: "", description: "", receiptImageUrl: "");
+  var _complain = Complain(id: DateTime.now().toString(), shopId: "", shopName: "", shopImageUrl: "",shopAddress: "", description: "", receiptImageUrl: "", dateTime: DateTime.now());
 
   void findShop(String code, BuildContext context){
-    final Shop shop = Provider.of<Shops>(context, listen: false).findShop(code);
+    final Shop? shop = Provider.of<Shops>(context, listen: false).findShop(code);
     if (shop != null) {
       showDialog(
           context: context,
@@ -66,7 +66,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
             actions: [
               TextButton(
                   onPressed: () {
-                    _complain = Complain(id: "", shopId: shop.id, shopName: shop.name, shopImageUrl: shop.imageUrl, shopAddress: shop.address,description: "", receiptImageUrl: "");
+                    _complain = Complain(id: "", shopId: shop.id, shopName: shop.name, shopImageUrl: shop.imageUrl, shopAddress: shop.address,description: "", receiptImageUrl: "", dateTime: DateTime.now());
                     Provider.of<Complains>(context,listen: false).setTemporaryComplain(_complain);
                     Navigator.of(context).pushReplacementNamed(ImagePickerScreen.routeName);
                   },
@@ -175,7 +175,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
               print("================= ${code} =================");
               findShop(code,context);
             }),
-        QRScannerOverlay(overlayColour: Colors.black.withOpacity(0.5))
+        QRScannerOverlay(Key("QRScannerOverlay"),overlayColour: Colors.black.withOpacity(0.5))
       ]),
       backgroundColor: Colors.black,
     );

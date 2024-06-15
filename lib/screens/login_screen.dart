@@ -33,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
           email: _emailController.text, password: _passwordController.text);
     } on FirebaseAuthException catch (e) {
       setState(() {
-        errorMessage = e.message;
+        errorMessage = e.message!;
       });
     }
   }
@@ -47,10 +47,10 @@ class _LoginScreenState extends State<LoginScreen> {
       final user = "customer";
       await Auth()
           .createUserWithEmailAndPassword(email: email, password: password)
-          .whenComplete(() => postDetailsToFirestore(name, email, phone, user,Auth().currentUser));
+          .whenComplete(() => postDetailsToFirestore(name, email, phone, user,Auth().currentUser!));
     } on FirebaseAuthException catch (e) {
       setState(() {
-        errorMessage = e.message;
+        errorMessage = e.message!;
         print("${e} =========== error in create user Method ===============");
       });
     }
@@ -65,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
           .set({'email': email, 'name': name, 'phone': phone, 'user': user});
     } catch (e) {
       setState(() {
-        errorMessage = e.message;
+        errorMessage = e.toString();
         print("${e} =========== error in post details Method ===============");
       });
     }
@@ -96,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
               fontSize: 18, color: Colors.black, fontFamily: 'Mina Regular'),
         ),
         style: ElevatedButton.styleFrom(
-            primary: Theme.of(context).primaryColor,
+            backgroundColor: Theme.of(context).primaryColor,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)))),
       ),
@@ -117,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
         style: TextStyle(fontFamily: 'Mina Regular'),
       ),
       style: TextButton.styleFrom(
-        primary: Colors.black,
+        foregroundColor: Colors.black,
       ),
     );
   }

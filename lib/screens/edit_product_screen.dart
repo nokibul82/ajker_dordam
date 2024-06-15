@@ -20,10 +20,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final _priceFocusNode = FocusNode();
   final _descriptionFocusNode = FocusNode();
   final _from = GlobalKey<FormState>();
-  File name;
-  File image;
+  late File name;
+  late File image;
   var _editedProduct = Product(
-      id: null, title: "", unit: "", price: 0, description: "", imageUrl: "");
+      id: "", title: "", unit: "", price: 0, description: "", imageUrl: "", created_at: DateTime.now());
 
   var initValues = {
     'id': '',
@@ -36,7 +36,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   var _isInit = true;
   var _isLoading = false;
   var _imageSelected = false;
-  String _dropDownValue;
+  late String _dropDownValue;
 
   @override
   void initState() {
@@ -47,7 +47,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final productId = ModalRoute.of(context).settings.arguments as String;
+      final productId = ModalRoute.of(context)?.settings.arguments as String;
       if (productId != null) {
         _editedProduct =
             Provider.of<Products>(context, listen: false).findById(productId);
@@ -90,9 +90,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   Future<void> _saveForm() async {
-    final validator = _from.currentState.validate();
-    if (!validator) return;
-    _from.currentState.save();
+    final validator = _from.currentState?.validate();
+    if (!validator!) return;
+    _from.currentState?.save();
     setState(() {
       _isLoading = true;
     });
@@ -179,7 +179,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         FocusScope.of(context).requestFocus(_unitFocusNode);
                       },
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return "Please give some proper value";
                         }
                         return null;
@@ -187,11 +187,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       onSaved: (value) {
                         _editedProduct = Product(
                             id: _editedProduct.id,
-                            title: value,
+                            title: value ?? "",
                             unit: _editedProduct.unit,
                             description: _editedProduct.description,
                             price: _editedProduct.price,
-                            imageUrl: _editedProduct.imageUrl);
+                            imageUrl: _editedProduct.imageUrl, created_at: DateTime.now());
                       },
                     ),
                     DropdownButton(
@@ -217,15 +217,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         value: _dropDownValue,
                         onChanged: (value) {
                           setState(() {
-                            _dropDownValue = value;
+                            _dropDownValue = value.toString() ?? "";
                           });
                           _editedProduct = Product(
                                       id: _editedProduct.id,
                                       title: _editedProduct.title,
-                                      unit: value,
+                                      unit: value.toString() ?? "",
                                       description: _editedProduct.description,
                                       price: _editedProduct.price,
-                                      imageUrl: _editedProduct.imageUrl);
+                                      imageUrl: _editedProduct.imageUrl, created_at: DateTime.now());
                         },
 
                     ),
@@ -240,7 +240,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             .requestFocus(_descriptionFocusNode);
                       },
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return "Please enter a price";
                         }
                         if (double.tryParse(value) == null) {
@@ -257,8 +257,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           title: _editedProduct.title,
                           unit: _editedProduct.unit,
                           description: _editedProduct.description,
-                          price: double.parse(value),
-                          imageUrl: _editedProduct.imageUrl,
+                          price: double.parse(value!),
+                          imageUrl: _editedProduct.imageUrl, created_at: DateTime.now(),
                         );
                       },
                     ),
@@ -268,7 +268,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       maxLines: 3,
                       keyboardType: TextInputType.multiline,
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return "Please enter some description";
                         }
                         if (value.length < 10) {
@@ -280,10 +280,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         _editedProduct = Product(
                             id: _editedProduct.id,
                             title: _editedProduct.title,
-                            description: value,
+                            description: value ?? "",
                             price: _editedProduct.price,
                             imageUrl: _editedProduct.imageUrl,
-                            unit: _editedProduct.unit);
+                            unit: _editedProduct.unit, created_at: DateTime.now());
                       },
                     ),
                     Row(
@@ -298,7 +298,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                     Border.all(width: 1, color: Colors.grey)),
                             child: Center(
                               child: image == null &&
-                                      initValues['imageUrl'].isEmpty && !_imageSelected
+                                      initValues['imageUrl']!.isEmpty && !_imageSelected
                                   ? Text(
                                       "Choose an image",
                                       textAlign: TextAlign.center,
@@ -309,8 +309,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                               'assets/images/placeholder.png'),
                                           image:
                                               _editedProduct.imageUrl.isNotEmpty && !_imageSelected
-                                                  ? NetworkImage(
-                                                      initValues['imageUrl'])
+                                                  ? Image.network(
+                                                      initValues['imageUrl']!).image
                                                   : FileImage(image)),
                                     ),
                             )),
@@ -331,7 +331,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                       pickImage(ImageSource.camera);
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      primary: MyApp.backColor,
+                                      backgroundColor: MyApp.backColor,
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(18.0),
@@ -375,9 +375,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                       pickImage(ImageSource.gallery);
                                     },
                                     style: OutlinedButton.styleFrom(
-                                        side: BorderSide(
+                                        foregroundColor: MyApp.backColor, side: BorderSide(
                                             width: 2, color: Colors.black),
-                                        primary: MyApp.backColor,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(18.0),

@@ -15,11 +15,11 @@ class Shop with ChangeNotifier {
   final DateTime created_at;
 
   Shop({
-      @required this.id,
-      @required this.name,
-      @required this.address,
-      @required this.imageUrl,
-      this.created_at
+      required this.id,
+      required this.name,
+      required this.address,
+      required this.imageUrl,
+      required this.created_at
   });
 }
 
@@ -52,9 +52,9 @@ class Shops with ChangeNotifier {
     return [..._items];
   }
 
-  String _imageUrl;
+  late String _imageUrl;
 
-  Shop findShop(String id){
+  Shop? findShop(String id){
     try{
       return _items.firstWhere((element) => element.id == id);
     }catch (error) {
@@ -148,7 +148,7 @@ class Shops with ChangeNotifier {
     final url = Uri.parse(
         'https://ajker-dordam-default-rtdb.asia-southeast1.firebasedatabase.app/shops/$shopId.json');
     var existingShopIndex = _items.indexWhere((element) => element.id == shopId);
-    var existingShop = _items[existingShopIndex];
+    Shop? existingShop = _items[existingShopIndex];
     final response = await http.delete(url);
     _items.removeAt(existingShopIndex);
     notifyListeners();
@@ -176,7 +176,7 @@ class Shops with ChangeNotifier {
 
       notifyListeners();
     } catch (error) {
-      print(error + "\nError from product upload Image method ");
+      print("$error \nError from product upload Image method ");
     }
   }
 }

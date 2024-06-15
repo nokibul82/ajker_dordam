@@ -16,8 +16,8 @@ class ImagePickerScreen extends StatefulWidget {
 }
 
 class _ImagePickerScreenState extends State<ImagePickerScreen> {
-  File image;
-  File name;
+  late File image;
+  late File name;
 
   Future<void> pickImage(ImageSource source) async {
     try {
@@ -111,7 +111,7 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                             pickImage(ImageSource.camera);
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: MyApp.backColor,
+                            backgroundColor: MyApp.backColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18.0),
                             ),
@@ -150,8 +150,7 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                             pickImage(ImageSource.gallery);
                           },
                           style: OutlinedButton.styleFrom(
-                              side: BorderSide(width: 2, color: Colors.black),
-                              primary: MyApp.backColor,
+                              foregroundColor: MyApp.backColor, side: BorderSide(width: 2, color: Colors.black),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18.0),
                               )),
@@ -197,7 +196,7 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                             ComplainConfirmScreen.routeName);
                       },
                       style: ElevatedButton.styleFrom(
-                          primary: MyApp.backColor,
+                          backgroundColor: MyApp.backColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
                           )),

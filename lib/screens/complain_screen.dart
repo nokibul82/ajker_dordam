@@ -8,7 +8,7 @@ import '../widgets/app_drawer.dart';
 import '../main.dart';
 
 class ComplainScreen extends StatelessWidget {
-  const ComplainScreen({Key key}) : super(key: key);
+  const ComplainScreen(Key key) : super(key: key);
   static const routeName = "/complainScreen";
 
   @override
@@ -68,7 +68,7 @@ class ComplainScreen extends StatelessWidget {
                     Navigator.of(context).pushReplacementNamed(ScannerScreen.routeName);
                   },
                   style: ElevatedButton.styleFrom(
-                      primary: MyApp.backColor,
+                      backgroundColor: MyApp.backColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18.0),
                       )),

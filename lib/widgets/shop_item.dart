@@ -80,7 +80,7 @@ class ShopItem extends StatelessWidget {
                         ],
                       ));
                     } catch (error) {
-                      scaffold
+                      ScaffoldMessenger.of(context)
                           .showSnackBar(SnackBar(content: Text("Deleting Failed")));
                     }
                   },

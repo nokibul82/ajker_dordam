@@ -32,7 +32,7 @@ class ComplainSuccessScreen extends StatelessWidget {
                     },
                     child: Text("Back to Home", style: TextStyle(fontSize: 24)),
                     style: ElevatedButton.styleFrom(
-                        primary: Theme.of(context).primaryColor,
+                        backgroundColor: Theme.of(context).primaryColor,
                         fixedSize: Size(300, 50)),
                   )
                 ],

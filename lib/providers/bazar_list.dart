@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-class BazarListModel{
+class BazarListModel {
   final String id;
   final String title;
   final int quantity;
@@ -8,14 +8,14 @@ class BazarListModel{
   final double price;
 
   BazarListModel(
-      {@required this.id,
-        @required this.title,
-        @required this.quantity,
-        @required this.unit,
-        @required this.price});
+      {required this.id,
+      required this.title,
+      required this.quantity,
+      required this.unit,
+      required this.price});
 }
 
-class BazarList with ChangeNotifier{
+class BazarList with ChangeNotifier {
   Map<String, BazarListModel> _items = {};
 
   Map<String, BazarListModel> get items {
@@ -34,12 +34,11 @@ class BazarList with ChangeNotifier{
     return total;
   }
 
-
   void addItem(String productId, String title, double price) {
     if (_items.containsKey(productId)) {
       _items.update(
           productId,
-              (oldItem) => BazarListModel(
+          (oldItem) => BazarListModel(
               id: oldItem.id,
               title: oldItem.title,
               quantity: oldItem.quantity + 1,
@@ -48,7 +47,7 @@ class BazarList with ChangeNotifier{
     } else {
       _items.putIfAbsent(
           productId,
-              () => BazarListModel(
+          () => BazarListModel(
               id: DateTime.now().toString(),
               title: title,
               quantity: 1,
@@ -64,19 +63,17 @@ class BazarList with ChangeNotifier{
   }
 
   void removeSingleItemCard(String productId) {
-    if (!_items.containsKey(productId)) {
-
-    }
-    if (_items[productId].quantity > 1) {
+    if (!_items.containsKey(productId)) {}
+    if (_items[productId]!.quantity > 1) {
       _items.update(
           productId,
-              (existingListItem) => BazarListModel(
+          (existingListItem) => BazarListModel(
               id: existingListItem.id,
               title: existingListItem.title,
               quantity: existingListItem.quantity - 1,
               unit: existingListItem.unit,
               price: existingListItem.price));
-    }else{
+    } else {
       _items.remove(productId);
     }
     notifyListeners();

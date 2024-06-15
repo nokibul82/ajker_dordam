@@ -15,8 +15,8 @@ class ComplainConfirmScreen extends StatefulWidget {
 }
 
 class _ComplainConfirmScreenState extends State<ComplainConfirmScreen> {
-  String shopImage;
-  File receiptImage;
+  late String shopImage;
+  late File receiptImage;
   final _textController = TextEditingController();
 
   @override
@@ -57,7 +57,7 @@ class _ComplainConfirmScreenState extends State<ComplainConfirmScreen> {
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },style: ElevatedButton.styleFrom(
-                                  primary: MyApp.backColor,
+                                  backgroundColor: MyApp.backColor,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                   )

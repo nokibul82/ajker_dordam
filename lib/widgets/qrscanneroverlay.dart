@@ -2,7 +2,7 @@ import 'package:ajker_dordam/main.dart';
 import 'package:flutter/material.dart';
 
 class QRScannerOverlay extends StatelessWidget {
-  const QRScannerOverlay({Key key, @required this.overlayColour})
+  const QRScannerOverlay(Key key,{required this.overlayColour})
       : super(key: key);
 
   final Color overlayColour;

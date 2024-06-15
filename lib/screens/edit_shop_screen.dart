@@ -18,11 +18,11 @@ class EditShopScreen extends StatefulWidget {
 class _EditShopScreenState extends State<EditShopScreen> {
   final _addressFocusNode = FocusNode();
   final _from = GlobalKey<FormState>();
-  var _editedShop = Shop(id: null, name: "", address: "", imageUrl: "");
+  var _editedShop = Shop(id: "1", name: "", address: "", imageUrl: "", created_at: DateTime.now());
   var initValues = {'id': '', 'name': '', 'address': '', 'imageUrl': ''};
 
-  File name;
-  File image;
+  late File name;
+  late File image;
 
   var _isInit = true;
   var _isLoading = false;
@@ -36,17 +36,15 @@ class _EditShopScreenState extends State<EditShopScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final productId = ModalRoute.of(context).settings.arguments as String;
-      if (productId != null) {
-        _editedShop =
-            Provider.of<Shops>(context, listen: false).findShop(productId);
-        initValues = {
-          'name': _editedShop.name,
-          'address': _editedShop.address,
-          'imageUrl': _editedShop.imageUrl
-        };
-      }
-    }
+      final productId = ModalRoute.of(context)?.settings.arguments as String;
+      _editedShop =
+          Provider.of<Shops>(context, listen: false).findShop(productId)!;
+      initValues = {
+        'name': _editedShop.name,
+        'address': _editedShop.address,
+        'imageUrl': _editedShop.imageUrl
+      };
+        }
     _isInit = false;
     super.didChangeDependencies();
   }
@@ -75,53 +73,19 @@ class _EditShopScreenState extends State<EditShopScreen> {
   }
 
   Future<void> _saveForm() async {
-    final validator = _from.currentState.validate();
-    if (!validator) return;
-    _from.currentState.save();
+    final validator = _from.currentState?.validate();
+    if (!validator!) return;
+    _from.currentState?.save();
     setState(() {
       _isLoading = true;
     });
-    if (_editedShop.id != null) {
-      if (_imageSelected) {
-        await Provider.of<Shops>(context, listen: false)
-            .uploadImage(image, name);
-      }
+    if (_imageSelected) {
       await Provider.of<Shops>(context, listen: false)
-          .updateShop(_editedShop.id, _editedShop);
-    } else {
-      try {
-        if (_imageSelected) {
-          await Provider.of<Shops>(context, listen: false)
-              .uploadImage(image, name);
-        } else {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text("Please Choose Image")));
-          setState(() {
-            _isLoading = false;
-          });
-          return;
-        }
-        await Provider.of<Shops>(context, listen: false).addShop(_editedShop);
-      } catch (error) {
-        await showDialog(
-            context: context,
-            builder: (ctx) {
-              return AlertDialog(
-                  title: Text("An error occurred"),
-                  content: Text("Something went wrong !"),
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text("Okay"))
-                  ]);
-            });
-      }
-      await Navigator.of(context).pushNamed(QrGenerateScreen.routeName);
+          .uploadImage(image, name);
     }
-    setState(() {
+    await Provider.of<Shops>(context, listen: false)
+        .updateShop(_editedShop.id, _editedShop);
+      setState(() {
       _isLoading = false;
     });
     Navigator.of(context).pop();
@@ -164,7 +128,7 @@ class _EditShopScreenState extends State<EditShopScreen> {
                                 .requestFocus(_addressFocusNode);
                           },
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (value!.isEmpty) {
                               return "Please give some proper value";
                             }
                             return null;
@@ -172,9 +136,9 @@ class _EditShopScreenState extends State<EditShopScreen> {
                           onSaved: (value) {
                             _editedShop = Shop(
                                 id: _editedShop.id,
-                                name: value,
+                                name: value ?? "",
                                 address: _editedShop.address,
-                                imageUrl: _editedShop.imageUrl);
+                                imageUrl: _editedShop.imageUrl, created_at: DateTime.now());
                           },
                         ),
                         SizedBox(height: 10,),
@@ -183,7 +147,7 @@ class _EditShopScreenState extends State<EditShopScreen> {
                           decoration: InputDecoration(labelText: "Address"),
                           textInputAction: TextInputAction.next,
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (value!.isEmpty) {
                               return "Please give some proper value";
                             }
                             return null;
@@ -192,8 +156,8 @@ class _EditShopScreenState extends State<EditShopScreen> {
                             _editedShop = Shop(
                                 id: _editedShop.id,
                                 name: _editedShop.name,
-                                address: value,
-                                imageUrl: _editedShop.imageUrl);
+                                address: value!,
+                                imageUrl: _editedShop.imageUrl, created_at: DateTime.now());
                           },
                         ),
                         SizedBox(height: 10,),
@@ -209,7 +173,7 @@ class _EditShopScreenState extends State<EditShopScreen> {
                                         width: 1, color: Colors.grey)),
                                 child: Center(
                                   child: image == null &&
-                                          initValues['imageUrl'].isEmpty && !_imageSelected
+                                          initValues['imageUrl']!.isEmpty && !_imageSelected
                                       ? Text(
                                           "Choose an image",
                                           textAlign: TextAlign.center,
@@ -220,8 +184,8 @@ class _EditShopScreenState extends State<EditShopScreen> {
                                                   'assets/images/placeholder.png'),
                                               image: _editedShop
                                                       .imageUrl.isNotEmpty && !_imageSelected
-                                                  ? NetworkImage(
-                                                      initValues['imageUrl'])
+                                                  ? Image.network(
+                                                      initValues['imageUrl']!).image
                                                   : FileImage(image)),
                                         ),
                                 )),
@@ -244,7 +208,7 @@ class _EditShopScreenState extends State<EditShopScreen> {
                                           pickImage(ImageSource.camera);
                                         },
                                         style: ElevatedButton.styleFrom(
-                                          primary: MyApp.backColor,
+                                          backgroundColor: MyApp.backColor,
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(18.0),
@@ -291,9 +255,8 @@ class _EditShopScreenState extends State<EditShopScreen> {
                                           pickImage(ImageSource.gallery);
                                         },
                                         style: OutlinedButton.styleFrom(
-                                            side: BorderSide(
+                                            foregroundColor: MyApp.backColor, side: BorderSide(
                                                 width: 2, color: Colors.black),
-                                            primary: MyApp.backColor,
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(18.0),

@@ -15,10 +15,10 @@ class UploadImageGetUrl extends StatefulWidget {
 }
 
 class _UploadImageGetUrlState extends State<UploadImageGetUrl> {
-  File image;
-  File name;
-  String imageUrl;
-  UploadTask _uploadTask;
+  late File image;
+  late File name;
+  late String imageUrl;
+  late UploadTask _uploadTask;
   bool isLoading = false;
 
   Future<void> pickImage(ImageSource source) async {
@@ -53,7 +53,7 @@ class _UploadImageGetUrlState extends State<UploadImageGetUrl> {
 
       imageUrl = await snapshot.ref.getDownloadURL();
     } catch (error) {
-      print(error + "\nError from upload Image method ");
+      print("$error \nError from upload Image method ");
     }
   }
 
@@ -115,7 +115,7 @@ class _UploadImageGetUrlState extends State<UploadImageGetUrl> {
                                     Navigator.of(context).pop();
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    primary: MyApp.backColor,
+                                    backgroundColor: MyApp.backColor,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                         BorderRadius.circular(20.0)),
@@ -194,8 +194,7 @@ class _UploadImageGetUrlState extends State<UploadImageGetUrl> {
                       pickImage(ImageSource.gallery);
                     },
                     style: OutlinedButton.styleFrom(
-                        side: BorderSide(width: 2, color: Colors.black),
-                        primary: Colors.white,
+                        foregroundColor: Colors.white, side: BorderSide(width: 2, color: Colors.black),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
                         )),
@@ -235,7 +234,7 @@ class _UploadImageGetUrlState extends State<UploadImageGetUrl> {
                       pickImage(ImageSource.camera);
                     },
                     style: ElevatedButton.styleFrom(
-                        primary: Colors.black87,
+                        backgroundColor: Colors.black87,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
                         )),

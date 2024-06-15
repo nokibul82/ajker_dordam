@@ -19,7 +19,7 @@ class QrGenerateScreen extends StatefulWidget {
 class _QrGenerateScreenState extends State<QrGenerateScreen> {
   final widgetsToImageController = WidgetsToImageController();
 
-  var lastshop = Shop(id: "", name: "", address: "", imageUrl: "");
+  var lastshop = Shop(id: "", name: "", address: "", imageUrl: "", created_at: DateTime.now());
 
   @override
   void initState(){
@@ -80,10 +80,10 @@ class _QrGenerateScreenState extends State<QrGenerateScreen> {
                   if (status.isGranted) {
                     var image = await widgetsToImageController.capture();
                     if (image != null) {
-                      Directory directory = await getExternalStorageDirectory();
+                      Directory? directory = await getExternalStorageDirectory();
                       print(directory);
                       var file = await File(
-                              "${directory.path}/${lastshop.name}${DateTime.now()}.png")
+                              "${directory?.path}/${lastshop.name}${DateTime.now()}.png")
                           .create(recursive: true)
                           .whenComplete(() {
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -105,8 +105,7 @@ class _QrGenerateScreenState extends State<QrGenerateScreen> {
                 ),
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
-                    primary: Theme.of(context).primaryColor),
+                        borderRadius: BorderRadius.all(Radius.circular(20))), backgroundColor: Theme.of(context).primaryColor),
               )
             ],
           )),

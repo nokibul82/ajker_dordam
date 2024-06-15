@@ -35,7 +35,7 @@ class _AppDrawerState extends State<AppDrawer> {
   void applyRole() async {
     var document = await FirebaseFirestore.instance
         .collection("users")
-        .doc(_user.uid)
+        .doc(_user?.uid)
         .get()
         .then((DocumentSnapshot snapshot) {
       if (snapshot.exists) {

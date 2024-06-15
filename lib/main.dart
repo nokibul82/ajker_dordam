@@ -43,7 +43,7 @@ Future main() async{
 
 class MyApp extends StatelessWidget {
 
-  final User user = Auth().currentUser;
+  final User? user = Auth().currentUser;
 
   static Color backColor = Color(0xff57dddd);
   @override
@@ -62,9 +62,9 @@ class MyApp extends StatelessWidget {
         ),
         home: MyHomePage(),
         routes: {
-          ProductsOverviewScreen.routeName: (context) => ProductsOverviewScreen(),
+          ProductsOverviewScreen.routeName: (context) => ProductsOverviewScreen(Key("ProductsOverviewScreen")),
           BazarListScreen.routeName: (context) => BazarListScreen(),
-          ComplainScreen.routeName: (context) => ComplainScreen(),
+          ComplainScreen.routeName: (context) => ComplainScreen(Key("ComplainScreen")),
           ScannerScreen.routeName: (context) => ScannerScreen(),
           ImagePickerScreen.routeName: (context) => ImagePickerScreen(),
           ComplainConfirmScreen.routeName: (context) => ComplainConfirmScreen(),
@@ -90,7 +90,7 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(stream: Auth().authStateChanges,builder: (context, snapshot){
-      return snapshot.hasData ? ProductsOverviewScreen() :LoginScreen();
+      return snapshot.hasData ? ProductsOverviewScreen(Key("ProductsOverviewScreen")) :LoginScreen();
     });
   }
 }

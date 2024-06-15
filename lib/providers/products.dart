@@ -16,13 +16,13 @@ class Product with ChangeNotifier {
   final DateTime created_at;
 
   Product({
-    @required this.id,
-    @required this.title,
-    @required this.description,
-    @required this.price,
-    @required this.unit,
-    this.imageUrl,
-    this.created_at,
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.price,
+    required this.unit,
+    required this.imageUrl,
+    required this.created_at,
   });
 }
 
@@ -82,7 +82,7 @@ class Products with ChangeNotifier {
     return [..._items];
   }
 
-  String _imageUrl;
+  late String _imageUrl;
 
   Product findById(String id) {
     return _items.firstWhere((element) => element.id == id);
@@ -177,7 +177,7 @@ class Products with ChangeNotifier {
         'https://ajker-dordam-default-rtdb.asia-southeast1.firebasedatabase.app/products/$id.json');
     final existingProductIndex =
         _items.indexWhere((element) => element.id == id);
-    var existingProduct = _items[existingProductIndex];
+    Product? existingProduct = _items[existingProductIndex];
     final response = await http.delete(url);
     _items.removeAt(existingProductIndex);
     notifyListeners();
@@ -205,7 +205,7 @@ class Products with ChangeNotifier {
 
       notifyListeners();
     } catch (error) {
-      print(error + "\nError from product upload Image method ");
+      print("$error \nError from product upload Image method ");
     }
   }
 }

@@ -11,7 +11,7 @@ class ListTiles extends StatefulWidget {
 
 class _ListTilesState extends State<ListTiles> {
 
-  List<Product> productData;
+  late List<Product> productData;
 
 
   @override
@@ -32,7 +32,7 @@ class _ListTilesState extends State<ListTiles> {
 }
 
 class Banner extends StatelessWidget {
-  const Banner({Key key}) : super(key: key);
+  const Banner(Key key) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

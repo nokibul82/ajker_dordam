@@ -5,7 +5,7 @@ class MyAppBar extends StatelessWidget{
 
   final String title;
 
-  const MyAppBar({this.title});
+  const MyAppBar({required this.title});
   @override
   Widget build(BuildContext context) {
     return AppBar(
