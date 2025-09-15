@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: Complains())
       ],
       child: MaterialApp(
-        title: 'Ajker Dordam',
+        title: 'Ajker Bazar',
         theme: ThemeData(
           primaryColor: backColor,
         ),

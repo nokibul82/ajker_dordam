@@ -14,7 +14,7 @@ class ProductsOverviewScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: MyApp.backColor,
         title: Text(
-          "আজকের দরদাম",
+          "আজকের বাজার",
           style: TextStyle(
               fontFamily: 'Mina Regular', color: Colors.black, fontSize: 22),
         ),
