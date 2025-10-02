@@ -4,16 +4,16 @@ import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'package:ajker_dordam/screens/edit_product_screen.dart';
-import 'package:ajker_dordam/screens/complain_history_screen.dart';
-import 'package:ajker_dordam/screens/complain_success_screen.dart';
-import 'package:ajker_dordam/screens/edit_shop_screen.dart';
-import 'package:ajker_dordam/screens/login_screen.dart';
+import './screens/edit_product_screen.dart';
+import './screens/complain_history_screen.dart';
+import './screens/complain_success_screen.dart';
+import './screens/edit_shop_screen.dart';
+import './screens/login_screen.dart';
 
 import './screens/qr_generate_screen.dart';
-import 'package:ajker_dordam/screens/upload_image_get_url.dart';
-import 'package:ajker_dordam/screens/user_shops_screen.dart';
-import 'package:ajker_dordam/screens/users_products_screen.dart';
+import './screens/upload_image_get_url.dart';
+import './screens/user_shops_screen.dart';
+import './screens/users_products_screen.dart';
 
 
 import './providers/products.dart';
@@ -50,10 +50,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: Products()),
-        ChangeNotifierProvider.value(value: BazarList()),
-        ChangeNotifierProvider.value(value: Shops()),
-        ChangeNotifierProvider.value(value: Complains())
+        ChangeNotifierProvider(create:(context)=> Products()),
+        ChangeNotifierProvider(create:(context)=> BazarList()),
+        ChangeNotifierProvider(create:(context)=> Shops()),
+        ChangeNotifierProvider(create:(context)=> Complains())
       ],
       child: MaterialApp(
         title: 'Ajker Dordam',
