@@ -141,13 +141,17 @@ class _ScannerScreenState extends State<ScannerScreen> {
           IconButton(
             color: Colors.white,
             icon: ValueListenableBuilder(
-              valueListenable: cameraController.torchState,
+              valueListenable: cameraController,
               builder: (context, state, child) {
                 switch (state as TorchState) {
                   case TorchState.off:
                     return const Icon(Icons.flash_off, color: Colors.grey);
                   case TorchState.on:
                     return const Icon(Icons.flash_on, color: Colors.yellow);
+                  case TorchState.auto:
+                    return const Icon(Icons.flash_auto, color: Colors.yellow);
+                  case TorchState.unavailable:
+                    return const Icon(Icons.not_interested, color: Colors.yellow);
                 }
               },
             ),
@@ -167,14 +171,21 @@ class _ScannerScreenState extends State<ScannerScreen> {
         ],
       ),
       body: Stack(children: [
+        // MobileScanner(
+        //     controller: cameraController,
+        //     onDetect: (barcode, args) async {
+        //       final String code = barcode.rawValue.toString();
+        //       print("================= ${code} =================");
+        //       findShop(code,context);
+        //     }),
         MobileScanner(
-            allowDuplicates: false,
-            controller: cameraController,
-            onDetect: (barcode, args) async {
-              final String code = barcode.rawValue.toString();
-              print("================= ${code} =================");
-              findShop(code,context);
-            }),
+          controller: cameraController,
+          onDetect: (barcodes) {
+                  final String code = barcodes.toString();
+                  print("================= ${code} =================");
+                  findShop(code,context);
+          },
+        ),
         QRScannerOverlay(Key("QRScannerOverlay"),overlayColour: Colors.black.withOpacity(0.5))
       ]),
       backgroundColor: Colors.black,

@@ -19,10 +19,11 @@ class QrGenerateScreen extends StatefulWidget {
 class _QrGenerateScreenState extends State<QrGenerateScreen> {
   final widgetsToImageController = WidgetsToImageController();
 
-  var lastshop = Shop(id: "", name: "", address: "", imageUrl: "", created_at: DateTime.now());
+  var lastshop = Shop(
+      id: "", name: "", address: "", imageUrl: "", created_at: DateTime.now());
 
   @override
-  void initState(){
+  void initState() {
     try {
       Provider.of<Shops>(context, listen: false).fetchAndSetShops();
       final shops = Provider.of<Shops>(context, listen: false).items;
@@ -65,11 +66,15 @@ class _QrGenerateScreenState extends State<QrGenerateScreen> {
                           fontFamily: 'Mina Regular',
                           color: Colors.black,
                           fontSize: 20,
-                          fontWeight: FontWeight.bold
-                      ),
+                          fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 5),
-                    QrImage(data: lastshop.id, version: QrVersions.auto, size: MediaQuery.of(context).size.width-5, backgroundColor: Colors.white,)
+                    // QrImage(
+                    //   data: lastshop.id,
+                    //   version: QrVersions.auto,
+                    //   size: MediaQuery.of(context).size.width-5,
+                    //   backgroundColor: Colors.white,
+                    // )
                   ],
                 ),
               ),
@@ -80,15 +85,16 @@ class _QrGenerateScreenState extends State<QrGenerateScreen> {
                   if (status.isGranted) {
                     var image = await widgetsToImageController.capture();
                     if (image != null) {
-                      Directory? directory = await getExternalStorageDirectory();
+                      Directory? directory =
+                          await getExternalStorageDirectory();
                       print(directory);
                       var file = await File(
                               "${directory?.path}/${lastshop.name}${DateTime.now()}.png")
                           .create(recursive: true)
                           .whenComplete(() {
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("QR image saved at $directory")));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("QR image saved at $directory")));
                       }).catchError((error) {
                         print(error);
                       });
@@ -105,7 +111,8 @@ class _QrGenerateScreenState extends State<QrGenerateScreen> {
                 ),
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20))), backgroundColor: Theme.of(context).primaryColor),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    backgroundColor: Theme.of(context).primaryColor),
               )
             ],
           )),
