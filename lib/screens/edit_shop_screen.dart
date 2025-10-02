@@ -18,15 +18,17 @@ class EditShopScreen extends StatefulWidget {
 class _EditShopScreenState extends State<EditShopScreen> {
   final _addressFocusNode = FocusNode();
   final _from = GlobalKey<FormState>();
-  var _editedShop = Shop(id: "1", name: "", address: "", imageUrl: "", created_at: DateTime.now());
+  var _editedShop = Shop(
+      id: "1", name: "", address: "", imageUrl: "", created_at: DateTime.now());
   var initValues = {'id': '', 'name': '', 'address': '', 'imageUrl': ''};
 
   late File name;
-  late File image;
+  File? image;
 
   var _isInit = true;
   var _isLoading = false;
   var _imageSelected = false;
+  var productId = "";
 
   @override
   void initState() {
@@ -36,15 +38,17 @@ class _EditShopScreenState extends State<EditShopScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final productId = ModalRoute.of(context)?.settings.arguments as String;
-      _editedShop =
-          Provider.of<Shops>(context, listen: false).findShop(productId)!;
-      initValues = {
-        'name': _editedShop.name,
-        'address': _editedShop.address,
-        'imageUrl': _editedShop.imageUrl
-      };
-        }
+      productId = ModalRoute.of(context)!.settings.arguments.toString();
+      if (productId != "") {
+        _editedShop =
+            Provider.of<Shops>(context, listen: false).findShop(productId!)!;
+        initValues = {
+          'name': _editedShop.name,
+          'address': _editedShop.address,
+          'imageUrl': _editedShop.imageUrl
+        };
+      }
+    }
     _isInit = false;
     super.didChangeDependencies();
   }
@@ -81,11 +85,12 @@ class _EditShopScreenState extends State<EditShopScreen> {
     });
     if (_imageSelected) {
       await Provider.of<Shops>(context, listen: false)
-          .uploadImage(image, name);
+          .uploadImage(image!, name);
     }
-    await Provider.of<Shops>(context, listen: false)
-        .updateShop(_editedShop.id, _editedShop);
-      setState(() {
+    productId == ""
+        ? await Provider.of<Shops>(context, listen: false).addShop(_editedShop)
+        : await Provider.of<Shops>(context, listen: false).updateShop(_editedShop.id, _editedShop);
+    setState(() {
       _isLoading = false;
     });
     Navigator.of(context).pop();
@@ -138,10 +143,13 @@ class _EditShopScreenState extends State<EditShopScreen> {
                                 id: _editedShop.id,
                                 name: value ?? "",
                                 address: _editedShop.address,
-                                imageUrl: _editedShop.imageUrl, created_at: DateTime.now());
+                                imageUrl: _editedShop.imageUrl,
+                                created_at: DateTime.now());
                           },
                         ),
-                        SizedBox(height: 10,),
+                        SizedBox(
+                          height: 10,
+                        ),
                         TextFormField(
                           initialValue: initValues['address'],
                           decoration: InputDecoration(labelText: "Address"),
@@ -157,10 +165,13 @@ class _EditShopScreenState extends State<EditShopScreen> {
                                 id: _editedShop.id,
                                 name: _editedShop.name,
                                 address: value!,
-                                imageUrl: _editedShop.imageUrl, created_at: DateTime.now());
+                                imageUrl: _editedShop.imageUrl,
+                                created_at: DateTime.now());
                           },
                         ),
-                        SizedBox(height: 10,),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
@@ -173,20 +184,25 @@ class _EditShopScreenState extends State<EditShopScreen> {
                                         width: 1, color: Colors.grey)),
                                 child: Center(
                                   child: image == null &&
-                                          initValues['imageUrl']!.isEmpty && !_imageSelected
+                                          initValues['imageUrl']!.isEmpty &&
+                                          !_imageSelected
                                       ? Text(
                                           "Choose an image",
                                           textAlign: TextAlign.center,
                                         )
                                       : FittedBox(
                                           child: FadeInImage(
-                                              placeholder: AssetImage(
-                                                  'assets/images/placeholder.png'),
-                                              image: _editedShop
-                                                      .imageUrl.isNotEmpty && !_imageSelected
-                                                  ? Image.network(
-                                                      initValues['imageUrl']!).image
-                                                  : FileImage(image)),
+                                            placeholder: AssetImage(
+                                                'assets/images/placeholder.png'),
+                                            image: _editedShop
+                                                        .imageUrl.isNotEmpty &&
+                                                    !_imageSelected
+                                                ? Image.network(
+                                                        initValues['imageUrl']!)
+                                                    .image
+                                                : FileImage(image!),
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                 )),
                             Expanded(
@@ -255,7 +271,8 @@ class _EditShopScreenState extends State<EditShopScreen> {
                                           pickImage(ImageSource.gallery);
                                         },
                                         style: OutlinedButton.styleFrom(
-                                            foregroundColor: MyApp.backColor, side: BorderSide(
+                                            foregroundColor: MyApp.backColor,
+                                            side: BorderSide(
                                                 width: 2, color: Colors.black),
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
@@ -275,10 +292,12 @@ class _EditShopScreenState extends State<EditShopScreen> {
                                               SizedBox(
                                                 width: 5,
                                               ),
-                                              Icon(
-                                                Icons.image_rounded,
-                                                color: Colors.black,
-                                                size: 20,
+                                              Expanded(
+                                                child: Icon(
+                                                  Icons.image_rounded,
+                                                  color: Colors.black,
+                                                  size: 20,
+                                                ),
                                               ),
                                             ]),
                                       ),

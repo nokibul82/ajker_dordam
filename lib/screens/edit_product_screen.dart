@@ -21,7 +21,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final _descriptionFocusNode = FocusNode();
   final _from = GlobalKey<FormState>();
   late File name;
-  late File image;
+  File? image;
+  var productId="";
   var _editedProduct = Product(
       id: "", title: "", unit: "", price: 0, description: "", imageUrl: "", created_at: DateTime.now());
 
@@ -36,7 +37,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   var _isInit = true;
   var _isLoading = false;
   var _imageSelected = false;
-  late String _dropDownValue;
+   String? _dropDownValue;
 
   @override
   void initState() {
@@ -47,10 +48,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final productId = ModalRoute.of(context)?.settings.arguments as String;
-      if (productId != null) {
+      productId = ModalRoute.of(context)!.settings.arguments.toString();
+      if(productId != ""){
         _editedProduct =
-            Provider.of<Products>(context, listen: false).findById(productId);
+            Provider.of<Products>(context, listen: false).findById(productId!);
         initValues = {
           'title': _editedProduct.title,
           'unit': _editedProduct.unit,
@@ -96,10 +97,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
     setState(() {
       _isLoading = true;
     });
-    if (_editedProduct.id != null) {
+    if (productId != "") {
       if (_imageSelected) {
         await Provider.of<Products>(context, listen: false)
-            .uploadImage(image, name);
+            .uploadImage(image!, name);
       }
       await Provider.of<Products>(context, listen: false)
           .updateProduct(_editedProduct.id, _editedProduct);
@@ -107,7 +108,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       try {
         if (_imageSelected) {
           await Provider.of<Products>(context, listen: false)
-              .uploadImage(image, name);
+              .uploadImage(image!, name);
         } else {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
           ScaffoldMessenger.of(context)
@@ -227,7 +228,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                       price: _editedProduct.price,
                                       imageUrl: _editedProduct.imageUrl, created_at: DateTime.now());
                         },
-
+                      hint: Text("Choose Unit",style: Theme.of(context).textTheme.labelLarge),
                     ),
                     TextFormField(
                       initialValue: initValues['price'],
@@ -311,7 +312,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                               _editedProduct.imageUrl.isNotEmpty && !_imageSelected
                                                   ? Image.network(
                                                       initValues['imageUrl']!).image
-                                                  : FileImage(image)),
+                                                  : FileImage(image!)),
                                     ),
                             )),
                         Expanded(
@@ -349,10 +350,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                                 fontSize: 20),
                                           ),
                                           SizedBox(width: 5),
-                                          Icon(
-                                            Icons.camera_alt_rounded,
-                                            color: Colors.black,
-                                            size: 20,
+                                          Expanded(
+                                            child: Icon(
+                                              Icons.camera_alt_rounded,
+                                              color: Colors.black,
+                                              size: 20,
+                                            ),
                                           ),
                                         ]),
                                   ),
@@ -395,10 +398,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                           SizedBox(
                                             width: 5,
                                           ),
-                                          Icon(
-                                            Icons.image_rounded,
-                                            color: Colors.black,
-                                            size: 20,
+                                          Expanded(
+                                            child: Icon(
+                                              Icons.image_rounded,
+                                              color: Colors.black,
+                                              size: 20,
+                                            ),
                                           ),
                                         ]),
                                   ),

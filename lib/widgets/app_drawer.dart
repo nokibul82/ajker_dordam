@@ -69,7 +69,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 .pushReplacementNamed(ProductsOverviewScreen.routeName);
           },
           leading: Icon(Icons.price_check),
-          title: Text("আজকের দরদাম", style: textStyle),
+          title: Text("আজকের বাজার", style: textStyle),
         ),
         Divider(thickness: 2, height: 5),
         ListTile(
@@ -111,7 +111,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 .pushReplacementNamed(ProductsOverviewScreen.routeName);
           },
           leading: Icon(Icons.price_check),
-          title: Text("আজকের দরদাম", style: textStyle),
+          title: Text("আজকের বাজার", style: textStyle),
         ),
         Divider(thickness: 2, height: 5),
         ListTile(
