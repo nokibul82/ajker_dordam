@@ -16,28 +16,43 @@ class ImagePickerScreen extends StatefulWidget {
 }
 
 class _ImagePickerScreenState extends State<ImagePickerScreen> {
-  late File image;
-  late File name;
+  File? image; // Remove 'late', just make it nullable
+  String imageName = ""; // Change from File to String for the name
 
   Future<void> pickImage(ImageSource source) async {
     try {
-      final image = await ImagePicker().pickImage(source: source);
-      if (image == null) return;
+      final pickedImage = await ImagePicker().pickImage(source: source);
+      if (pickedImage == null) return;
 
-      final tempPath = File(image.path);
-      final tempName = File(image.name);
+      final tempPath = File(pickedImage.path);
       setState(() {
-        this.image = tempPath;
-        this.name = tempName;
+        image = tempPath;
+        imageName = pickedImage.name; // Store the name as String
       });
     } on PlatformException catch (e) {
       print(e);
     }
   }
 
+  void _submitComplaint() {
+    if (image != null) {
+      final complains = Provider.of<Complains>(context, listen: false);
+      complains.setImage(image!);
+      complains.setName(File(imageName)); // Convert to File if needed, or adjust your provider
+      Navigator.of(context).pushReplacementNamed(ComplainConfirmScreen.routeName);
+    } else {
+      // Show error if no image is selected
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please select an image first'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final complains = Provider.of<Complains>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
@@ -76,21 +91,18 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                   alignment: Alignment.center,
                   child: image == null
                       ? Center(
-                          child: Text(
-                            "রশিদ এর ছবি দিন",
-                            style: TextStyle(
-                                fontFamily: 'Mina Regular',
-                                color: Colors.black,
-                                fontSize: 18),
-                          ),
-                        )
-                      : FadeInImage(
-                          fadeInCurve: Curves.bounceIn,
-                          placeholder:
-                              AssetImage('assets/images/placeholder.png'),
-                          image: FileImage(image),
-                          fit: BoxFit.cover,
-                        )),
+                    child: Text(
+                      "রশিদ এর ছবি দিন",
+                      style: TextStyle(
+                          fontFamily: 'Mina Regular',
+                          color: Colors.black,
+                          fontSize: 18),
+                    ),
+                  )
+                      : Image.file(
+                    image!, // Use ! since we checked for null
+                    fit: BoxFit.cover,
+                  )),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Row(
@@ -150,7 +162,8 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                             pickImage(ImageSource.gallery);
                           },
                           style: OutlinedButton.styleFrom(
-                              foregroundColor: MyApp.backColor, side: BorderSide(width: 2, color: Colors.black),
+                              foregroundColor: MyApp.backColor,
+                              side: BorderSide(width: 2, color: Colors.black),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18.0),
                               )),
@@ -188,15 +201,11 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
                       borderRadius: BorderRadius.circular(18.0),
                     ),
                     child: ElevatedButton(
-                      onPressed: () {
-                        // Submit Button
-                        complains.setImage(image);
-                        complains.setName(name);
-                        Navigator.of(context).pushReplacementNamed(
-                            ComplainConfirmScreen.routeName);
-                      },
+                      onPressed: image != null ? _submitComplaint : null, // Disable if no image
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: MyApp.backColor,
+                          backgroundColor: image != null
+                              ? MyApp.backColor
+                              : Colors.grey, // Visual feedback
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
                           )),

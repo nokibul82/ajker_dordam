@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-
 class Shop with ChangeNotifier {
   final String id;
   final String name;
@@ -14,13 +13,12 @@ class Shop with ChangeNotifier {
   final String imageUrl;
   final DateTime created_at;
 
-  Shop({
-      required this.id,
+  Shop(
+      {required this.id,
       required this.name,
       required this.address,
       required this.imageUrl,
-      required this.created_at
-  });
+      required this.created_at});
 }
 
 class Shops with ChangeNotifier {
@@ -39,13 +37,13 @@ class Shops with ChangeNotifier {
     //     imageUrl:
     //         "https://drive.google.com/uc?export=view&id=1muKQHh9JORmrYqTu4Dx0lMDbx5NM2OM7",
     //     created_at: DateTime.now()),
-  //  Shop(
-  //     id: "shop2",
-  //     name: "কুমিল্লা স্টোর",
-  //     address: "কুমিল্লা",
-  //     imageUrl:
-  //         "https://drive.google.com/uc?export=view&id=1muKQHh9JORmrYqTu4Dx0lMDbx5NM2OM7",
-  //     created_at: DateTime.now()),
+    //  Shop(
+    //     id: "shop2",
+    //     name: "কুমিল্লা স্টোর",
+    //     address: "কুমিল্লা",
+    //     imageUrl:
+    //         "https://drive.google.com/uc?export=view&id=1muKQHh9JORmrYqTu4Dx0lMDbx5NM2OM7",
+    //     created_at: DateTime.now()),
   ];
 
   List<Shop> get items {
@@ -54,14 +52,19 @@ class Shops with ChangeNotifier {
 
   late String _imageUrl;
 
-  Shop? findShop(String id){
-    try{
-      return _items.firstWhere((element) => element.id == id);
-    }catch (error) {
-      print(
-          "=================== ${error} ==============\n =========== Error from findShop Method=============");
-      return null;
-    }
+  Shop? findShop(String id) {
+    // try {
+      return _items.firstWhere((element) {
+        print("shop id: ${element.id}");
+        print("shop id: -$id");
+        print("match: ${element.id == "-"+id}");
+        return element.id == "-$id";
+      });
+    // } catch (error) {
+    //   print(
+    //       "=================== ${error} ==============\n =========== Error from findShop Method with id $id =============");
+    //   return null;
+    // }
   }
 
   Future<void> fetchAndSetShops() async {
@@ -78,8 +81,7 @@ class Shops with ChangeNotifier {
             name: shopData['name'],
             address: shopData['address'],
             imageUrl: shopData['imageUrl'],
-            created_at: DateTime.parse(shopData['created_at'])
-        ));
+            created_at: DateTime.parse(shopData['created_at'])));
       });
 
       _items = loadedShops;
@@ -89,7 +91,6 @@ class Shops with ChangeNotifier {
           "=================== ${error} ==============\n =============== Error from fetchAndSetShops Method");
     }
   }
-
 
   Future<void> addShop(Shop newShop) async {
     final url = Uri.parse(
@@ -126,12 +127,11 @@ class Shops with ChangeNotifier {
         final url = Uri.parse(
             'https://ajker-dordam-default-rtdb.asia-southeast1.firebasedatabase.app/shops/$shopId.json');
         await http.patch(url,
-        body: json.encode({
-          'name': shop.name,
-          'address': shop.address,
-          'imageUrl':_imageUrl.isEmpty ? shop.imageUrl : _imageUrl
-        })
-        );
+            body: json.encode({
+              'name': shop.name,
+              'address': shop.address,
+              'imageUrl': _imageUrl.isEmpty ? shop.imageUrl : _imageUrl
+            }));
       } catch (error) {
         print(
             "=================== ${error} ==============\n =============== Error from \'updateShop\' Method");
@@ -147,21 +147,22 @@ class Shops with ChangeNotifier {
   Future<void> deleteShop(String shopId) async {
     final url = Uri.parse(
         'https://ajker-dordam-default-rtdb.asia-southeast1.firebasedatabase.app/shops/$shopId.json');
-    var existingShopIndex = _items.indexWhere((element) => element.id == shopId);
+    var existingShopIndex =
+        _items.indexWhere((element) => element.id == shopId);
     Shop? existingShop = _items[existingShopIndex];
     final response = await http.delete(url);
     _items.removeAt(existingShopIndex);
     notifyListeners();
-    if( response.statusCode >= 400){
+    if (response.statusCode >= 400) {
       _items.insert(existingShopIndex, existingShop);
       notifyListeners();
       throw HttpException("Could not delete Shop in deleteShop function.");
-    } else FirebaseStorage.instance.refFromURL(existingShop.imageUrl);
+    } else
+      FirebaseStorage.instance.refFromURL(existingShop.imageUrl);
     existingShop = null;
   }
 
-
-  Future<void> uploadImage(File image,File name) async {
+  Future<void> uploadImage(File image, File name) async {
     final path = 'images/${name}';
     final file = image;
 

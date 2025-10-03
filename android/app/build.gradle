@@ -26,8 +26,8 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.example.ajker_dordam"
-    compileSdkVersion 36
-    ndkVersion flutter.ndkVersion
+    compileSdkVersion 35
+    ndkVersion "26.1.10909125"
 
 
     compileOptions {
@@ -72,4 +72,6 @@ flutter {
     source '../..'
 }
 
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 

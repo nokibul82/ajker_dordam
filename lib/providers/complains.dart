@@ -78,6 +78,7 @@ class Complains with ChangeNotifier {
       });
 
       _items = loadedComplains;
+      print("complain fetched: ${_items.length}");
       notifyListeners();
     } catch (error) {
       print(" ${error} \nError from fetch and set complain method");
@@ -90,7 +91,7 @@ class Complains with ChangeNotifier {
     final url = Uri.parse(
         'https://ajker-dordam-default-rtdb.asia-southeast1.firebasedatabase.app/complains.json');
 
-    try {
+    // try {
       final response = await http.post(url,
           body: json.encode({
             'shopId': _temporaryComplain.shopId,
@@ -99,7 +100,7 @@ class Complains with ChangeNotifier {
             'shopAddress': _temporaryComplain.shopAddress,
             'receiptImageUrl': _temporaryComplain.receiptImageUrl,
             'description': _temporaryComplain.description,
-            'dateTime': dateTime
+            'dateTime': dateTime.toIso8601String()
           }));
       print("data post done");
       final newComplain = Complain(
@@ -113,9 +114,9 @@ class Complains with ChangeNotifier {
           dateTime: dateTime);
       _items.add(newComplain);
       notifyListeners();
-    } catch (error) {
-      print("${error} \nError from add complain method");
-    }
+    // } catch (error) {
+    //   print("${error} \nError from add complain method");
+    // }
   }
 
   Future<void> uploadImage() async {

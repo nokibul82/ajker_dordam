@@ -17,98 +17,137 @@ class ScannerScreen extends StatefulWidget {
 }
 
 class _ScannerScreenState extends State<ScannerScreen> {
+  // Move controller outside build method and make it late final
+  late final MobileScannerController cameraController;
+  var _complain = Complain(
+      id: DateTime.now().toString(),
+      shopId: "",
+      shopName: "",
+      shopImageUrl: "",
+      shopAddress: "",
+      description: "",
+      receiptImageUrl: "",
+      dateTime: DateTime.now());
+  bool _isShowingSnackbar = false;
+  bool _isShowedDialog = false;
 
-  MobileScannerController cameraController = MobileScannerController();
-  var _complain = Complain(id: DateTime.now().toString(), shopId: "", shopName: "", shopImageUrl: "",shopAddress: "", description: "", receiptImageUrl: "", dateTime: DateTime.now());
+  @override
+  void initState() {
+    _isShowedDialog = false;
+    super.initState();
+    // Initialize controller once when widget is created
+    cameraController = MobileScannerController();
+  }
 
-  void findShop(String code, BuildContext context){
-    final Shop? shop = Provider.of<Shops>(context, listen: false).findShop(code);
+  @override
+  void dispose() {
+    // Properly dispose the controller when widget is destroyed
+    cameraController.dispose();
+    super.dispose();
+  }
+
+  void findShop(String code, BuildContext context) {
+    final Shop? shop =
+    Provider.of<Shops>(context, listen: false).findShop(code);
+    print("found shop: ${shop?.name}");
     if (shop != null) {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20)),
-            title: Text(
-              "দোকান নিশ্চিত করুন",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontFamily: 'Mina Regular',
-                  color: Colors.black,
-                  fontSize: 24),
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  shop.name,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Mina Regular',
-                      color: Colors.black,
-                      fontSize: 24,
-                  ),
-                ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child:FadeInImage(
-                    fadeInCurve: Curves.bounceIn,
-                    placeholder:
-                    AssetImage('assets/images/placeholder.png'),
-                    image: NetworkImage(shop.imageUrl),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ],
-            ),
-            backgroundColor: Colors.white,
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    _complain = Complain(id: "", shopId: shop.id, shopName: shop.name, shopImageUrl: shop.imageUrl, shopAddress: shop.address,description: "", receiptImageUrl: "", dateTime: DateTime.now());
-                    Provider.of<Complains>(context,listen: false).setTemporaryComplain(_complain);
-                    Navigator.of(context).pushReplacementNamed(ImagePickerScreen.routeName);
-                  },
-                  child: Text(
-                    "হ্যাঁ নিশ্চিত",
+      if(!_isShowedDialog){
+        showDialog(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  title: Text(
+                    "দোকান নিশ্চিত করুন",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Mina Regular',
-                        color: Colors.green,
+                        color: Colors.black,
                         fontSize: 24),
-                  )),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(
-                    "না আবার চেষ্টা করুন",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontFamily: 'Mina Regular',
-                        color: Colors.redAccent,
-                        fontSize: 24),
-                  )),
-            ],
-          ));
-    }
-    else {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20)),
-            title: Text(
-              "আবার QR স্ক্যান করুন",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontFamily: 'Mina Regular',
-                  color: Colors.black,
-                  fontSize: 24),
-            ),
-            backgroundColor: Colors.white,
-          ));
+                  ),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        shop.name,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Mina Regular',
+                          color: Colors.black,
+                          fontSize: 24,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: FadeInImage(
+                          fadeInCurve: Curves.bounceIn,
+                          placeholder:
+                              AssetImage('assets/images/placeholder.png'),
+                          image: NetworkImage(shop.imageUrl),
+                          fit: BoxFit.cover,
+                          width: 200,
+                          height: 150,
+                        ),
+                      ),
+                    ],
+                  ),
+                  backgroundColor: Colors.white,
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          _complain = Complain(
+                              id: "",
+                              shopId: shop.id,
+                              shopName: shop.name,
+                              shopImageUrl: shop.imageUrl,
+                              shopAddress: shop.address,
+                              description: "",
+                              receiptImageUrl: "",
+                              dateTime: DateTime.now());
+                          Provider.of<Complains>(context, listen: false)
+                              .setTemporaryComplain(_complain);
+                          Navigator.of(context).pushReplacementNamed(
+                              ImagePickerScreen.routeName);
+                        },
+                        child: Text(
+                          "হ্যাঁ নিশ্চিত",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: 'Mina Regular',
+                              color: Colors.green,
+                              fontSize: 24),
+                        )),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          "না আবার চেষ্টা করুন",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: 'Mina Regular',
+                              color: Colors.redAccent,
+                              fontSize: 24),
+                        )),
+                  ],
+                ));
+        this.dispose();
+        _isShowedDialog = true;
+      }
+    } else {
+      if (!_isShowingSnackbar) {
+        _isShowingSnackbar = true;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Failed to find the shop. try again."),
+            duration: Duration(seconds: 2),
+          ),
+        ).closed.then((_) {
+          _isShowingSnackbar = false; // Reset flag when Snackbar is closed
+        });
+      }
     }
   }
 
@@ -143,7 +182,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
             icon: ValueListenableBuilder(
               valueListenable: cameraController,
               builder: (context, state, child) {
-                switch (state as TorchState) {
+                final torchState = (state as MobileScannerState).torchState;
+                switch (torchState) {
                   case TorchState.off:
                     return const Icon(Icons.flash_off, color: Colors.grey);
                   case TorchState.on:
@@ -151,7 +191,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
                   case TorchState.auto:
                     return const Icon(Icons.flash_auto, color: Colors.yellow);
                   case TorchState.unavailable:
-                    return const Icon(Icons.not_interested, color: Colors.yellow);
+                    return const Icon(Icons.not_interested,
+                        color: Colors.yellow);
                 }
               },
             ),
@@ -171,22 +212,22 @@ class _ScannerScreenState extends State<ScannerScreen> {
         ],
       ),
       body: Stack(children: [
-        // MobileScanner(
-        //     controller: cameraController,
-        //     onDetect: (barcode, args) async {
-        //       final String code = barcode.rawValue.toString();
-        //       print("================= ${code} =================");
-        //       findShop(code,context);
-        //     }),
         MobileScanner(
           controller: cameraController,
           onDetect: (barcodes) {
-                  final String code = barcodes.toString();
-                  print("================= ${code} =================");
-                  findShop(code,context);
+            // Fixed barcode detection
+            if (barcodes.barcodes.isNotEmpty) {
+              final barcode = barcodes.barcodes.first;
+              if (barcode.rawValue != null) {
+                final String code = barcode.rawValue!;
+                print("================= barcode: ${code} =================");
+                findShop(code, context);
+              }
+            }
           },
         ),
-        QRScannerOverlay(Key("QRScannerOverlay"),overlayColour: Colors.black.withOpacity(0.5))
+        QRScannerOverlay(Key("QRScannerOverlay"),
+            overlayColour: Colors.black.withOpacity(0.5))
       ]),
       backgroundColor: Colors.black,
     );
