@@ -14,16 +14,17 @@ class Product with ChangeNotifier {
   final double price;
   final String imageUrl;
   final DateTime created_at;
+  final String shopId;
 
-  Product({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.price,
-    required this.unit,
-    required this.imageUrl,
-    required this.created_at,
-  });
+  Product(
+      {required this.id,
+      required this.title,
+      required this.description,
+      required this.price,
+      required this.unit,
+      required this.imageUrl,
+      required this.created_at,
+      required this.shopId});
 }
 
 class Products with ChangeNotifier {
@@ -82,7 +83,7 @@ class Products with ChangeNotifier {
     return [..._items];
   }
 
-  late String _imageUrl;
+  String _imageUrl = "";
 
   Product findById(String id) {
     return _items.firstWhere((element) => element.id == id);
@@ -103,7 +104,8 @@ class Products with ChangeNotifier {
             price: productData['price'],
             unit: productData['unit'],
             imageUrl: productData['imageUrl'],
-            created_at: DateTime.parse(productData['created_at'])));
+            created_at: DateTime.parse(productData['created_at']),
+            shopId: productData['shopId']));
       });
 
       _items = loadedProducts;
@@ -137,7 +139,8 @@ class Products with ChangeNotifier {
           price: newProduct.price,
           description: newProduct.description,
           imageUrl: _imageUrl,
-          created_at: createdAt);
+          created_at: createdAt,
+          shopId: newProduct.shopId);
       _items.add(uploadedProduct);
       _imageUrl = "";
       notifyListeners();
@@ -150,7 +153,7 @@ class Products with ChangeNotifier {
   Future<void> updateProduct(String productId, Product product) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == productId);
     if (prodIndex >= 0) {
-      try{
+      try {
         final url = Uri.parse(
             'https://ajker-dordam-default-rtdb.asia-southeast1.firebasedatabase.app/products/$productId.json');
         await http.patch(url,
@@ -159,9 +162,10 @@ class Products with ChangeNotifier {
               'unit': product.unit,
               'price': product.price,
               'description': product.description,
-              'imageUrl': _imageUrl.isEmpty ? product.imageUrl : _imageUrl
+              'imageUrl': _imageUrl.isEmpty ? product.imageUrl : _imageUrl,
+              'shopId': product.shopId
             }));
-      }catch (error) {
+      } catch (error) {
         print(
             "=================== ${error} ==============\n =============== Error from \'updateProduct\' Method");
       }
@@ -186,11 +190,12 @@ class Products with ChangeNotifier {
       notifyListeners();
       throw HttpException(
           "Could not delete product in deleteProduct function.");
-    }else FirebaseStorage.instance.refFromURL(existingProduct.imageUrl).delete();
+    } else
+      FirebaseStorage.instance.refFromURL(existingProduct.imageUrl).delete();
     existingProduct = null;
   }
 
-  Future<void> uploadImage(File image,File name) async {
+  Future<void> uploadImage(File image, File name) async {
     final path = 'images/${name}';
     final file = image;
 

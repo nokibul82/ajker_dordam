@@ -50,21 +50,18 @@ class Shops with ChangeNotifier {
     return [..._items];
   }
 
-  late String _imageUrl;
+  String _imageUrl = "";
 
   Shop? findShop(String id) {
-    // try {
+    try {
       return _items.firstWhere((element) {
-        print("shop id: ${element.id}");
-        print("shop id: -$id");
-        print("match: ${element.id == "-"+id}");
-        return element.id == "-$id";
+        return element.id == id;
       });
-    // } catch (error) {
-    //   print(
-    //       "=================== ${error} ==============\n =========== Error from findShop Method with id $id =============");
-    //   return null;
-    // }
+    } catch (error) {
+      print(
+          "=================== ${error} ==============\n =========== Error from findShop Method with id $id =============");
+      return null;
+    }
   }
 
   Future<void> fetchAndSetShops() async {

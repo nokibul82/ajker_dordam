@@ -5,13 +5,11 @@ import '../providers/products.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../screens/comparison_screen.dart';
-
-class TileItem extends StatelessWidget {
+class ProductCard extends StatelessWidget {
+  final Product product;
+  ProductCard({required this.product});
   @override
   Widget build(BuildContext context) {
-    var _isSelected = false;
-    final product = Provider.of<Product>(context, listen: false);
     final bazarList = Provider.of<BazarList>(context, listen: false);
     return ListTile(
       tileColor: MyApp.backColor.withOpacity(0.5),
@@ -25,7 +23,8 @@ class TileItem extends StatelessWidget {
         product.title,
         style: TextStyle(fontFamily: 'Mina Regular', fontSize: 16),
       ),
-      subtitle: Text(product.unit, style: TextStyle(fontFamily: 'Mina Regular', fontSize: 14)),
+      subtitle: Text(product.unit,
+          style: TextStyle(fontFamily: 'Mina Regular', fontSize: 14)),
       trailing: Container(
         width: 115,
         child: Row(
@@ -53,25 +52,7 @@ class TileItem extends StatelessWidget {
                     Icons.add_circle_outline_outlined,
                     color: Colors.black,
                   )),
-            ),
-            Expanded(
-              child: IconButton(
-                  onPressed: () {
-                    // Navigate to comparison screen
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ComparisonScreen(
-                          selectedProduct: product,
-                        ),
-                      ),
-                    );
-                  },
-                  icon: Icon(
-                    Icons.compare_arrows,
-                    color: Colors.black,
-                  )),
-            ),
+            )
           ],
         ),
       ),
