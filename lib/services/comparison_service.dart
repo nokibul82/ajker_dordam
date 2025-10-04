@@ -12,26 +12,34 @@ class ComparisonService {
 
     return allProducts.where((product) {
       // Skip the same product
-      if (product.id == selectedProduct.id) return false;
+      if (product.id == selectedProduct.id) {
+        print("Same product");
+        return false;
+      }
 
       // Skip products from the same shop
-      if (product.shopId == selectedProduct.shopId) return false;
+      if (product.shopId == selectedProduct.shopId) {
+        print("Same shop");
+        return false;
+      }
 
       final productName = product.title.toLowerCase().trim();
 
       // Simple word-by-word matching
       final selectedWords = selectedProductName.split(' ');
       final productWords = productName.split(' ');
+      print(selectedWords);
+      print(productWords);
 
       int matchingWords = 0;
       for (var word in selectedWords) {
-        if (word.length > 2 && productWords.contains(word)) {
+        if (word.length > 1 && productWords.contains(word)) {
           matchingWords++;
         }
       }
 
       // Consider products similar if at least 2 words match
-      return matchingWords >= 2;
+      return matchingWords >= 1;
     }).toList();
   }
 

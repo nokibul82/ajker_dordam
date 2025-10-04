@@ -155,15 +155,16 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   Future<void> _saveForm() async {
     final validator = _from.currentState?.validate();
-    if (!validator!) return;
-
-    // Validate shop selection
-    if (_selectedShopId == null || _selectedShopId!.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Please select a shop"))
-      );
+    if(_dropDownValue == null || _dropDownValue!.isEmpty){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please select unit")));
       return;
     }
+    // Validate shop selection
+    if (_selectedShopId == null || _selectedShopId!.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Please select a shop")));
+      return;
+    }
+    if (!validator!) return;
 
     _from.currentState?.save();
     setState(() {
@@ -302,14 +303,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   items: [
-                    // Default "Select Shop" option
-                    DropdownMenuItem<String>(
-                      value: "",
-                      child: Text(
-                        "দোকান নির্বাচন করুন",
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ),
                     // Unique shop items
                     ..._uniqueShops.map<DropdownMenuItem<String>>((shopMap) {
                       final shopId = shopMap['id'].toString();
@@ -338,7 +331,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       price: _editedProduct.price,
                       imageUrl: _editedProduct.imageUrl,
                       created_at: DateTime.now(),
-                      shopId: newValue ?? "",
+                      shopId: newValue!,
                     );
                   },
                 )
@@ -356,19 +349,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
               const SizedBox(height: 16),
 
-              // Show selected shop info for debugging
-              if (_selectedShopId != null && _selectedShopId!.isNotEmpty && _shopsLoaded)
-                Container(
-                  padding: EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    'Selected Shop: ${_getShopName(_selectedShopId!)}',
-                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                  ),
-                ),
 
               const SizedBox(height: 16),
 
