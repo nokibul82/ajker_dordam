@@ -128,7 +128,8 @@ class Products with ChangeNotifier {
             'price': newProduct.price,
             'description': newProduct.description,
             'imageUrl': _imageUrl,
-            'created_at': createdAt.toIso8601String()
+            'created_at': createdAt.toIso8601String(),
+            'shopId': newProduct.shopId
           }));
       print('==================== PRODUCT POST DONE=================');
 

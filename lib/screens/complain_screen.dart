@@ -33,26 +33,23 @@ class ComplainScreen extends StatelessWidget {
         drawer: AppDrawer(),
         body: Column(
           children: [
-            Card(
+            Container(
+              height: MediaQuery.of(context).size.height * 0.3,
+              width: double.maxFinite,
               margin: EdgeInsets.all(15),
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.5,
-                width: double.infinity,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: MyApp.backColor.withOpacity(0.8),
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(30),
-                        topLeft: Radius.circular(30))),
-                child: Text(
-                  "অতিরিক্ত দাম ?\nঅভিযোগ করুন",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: 'Mina Regular',
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 44,
-                  ),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: MyApp.backColor.withValues(alpha: 0.8),
+                borderRadius: BorderRadius.circular(12)
+              ),
+              child: Text(
+                "অতিরিক্ত দাম ?\nঅভিযোগ করুন",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'Mina Regular',
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 44,
                 ),
               ),
             ),
@@ -76,20 +73,59 @@ class ComplainScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "অভিযোগ করুন",
+                        "অভিযোগ (কিউআর)",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Mina Regular',
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
-                          fontSize: 26,
+                          fontSize: 22,
                         ),
                       ),
                       SizedBox(
-                        width: 15,
+                        width: 10,
                       ),
                       Icon(
                         Icons.warning_amber,
+                        color: Colors.black,
+                      )
+                    ],
+                  )),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.94,
+              height: MediaQuery.of(context).size.height * 0.1,
+              child: ElevatedButton(
+                  onPressed: () async{
+                    await Provider.of<Shops>(context, listen: false).fetchAndSetShops();
+                    Navigator.of(context).pushReplacementNamed(ScannerScreen.routeName);
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: MyApp.backColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      )),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "অভিযোগ (ফর্ম পুরন)",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Mina Regular',
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Icon(
+                        Icons.edit,
                         color: Colors.black,
                       )
                     ],
@@ -120,7 +156,7 @@ class ComplainScreen extends StatelessWidget {
                           fontFamily: 'Mina Regular',
                           color: MyApp.backColor,
                           fontWeight: FontWeight.bold,
-                          fontSize: 26,
+                          fontSize: 22,
                         ),
                       ),
                       SizedBox(
