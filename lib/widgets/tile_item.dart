@@ -30,10 +30,8 @@ class TileItem extends StatelessWidget {
         width: 115,
         child: Row(
           children: [
-            Expanded(
-              child: Text(product.price.toString(),
-                  style: TextStyle(fontFamily: 'Mina Regular', fontSize: 16)),
-            ),
+            Text(product.price.toString(),
+                style: TextStyle(fontFamily: 'Mina Regular', fontSize: 16)),
             Expanded(
               child: IconButton(
                   onPressed: () {

@@ -1,3 +1,4 @@
+import 'package:ajker_dordam/screens/govt_price_list_screen.dart';
 import 'package:ajker_dordam/screens/help_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -77,7 +78,8 @@ class MyApp extends StatelessWidget {
           UploadImageGetUrl.routeName: (context) => UploadImageGetUrl(),
           QrGenerateScreen.routeName: (context) => QrGenerateScreen(),
           MyHomePage.routeName: (context) => MyHomePage(),
-          HelpScreem.routeName: (context) => HelpScreem()
+          HelpScreem.routeName: (context) => HelpScreem(),
+          GovtPriceListScreen.routeName: (context) => GovtPriceListScreen(Key("GovtPriceListScreen"))
         },
         debugShowCheckedModeBanner: false,
       ),

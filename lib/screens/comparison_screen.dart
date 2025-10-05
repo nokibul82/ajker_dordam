@@ -211,7 +211,7 @@ class _ComparisonScreenState extends State<ComparisonScreen> {
       children: [
         // Selected Product Header
         Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(8.0),
           child: Text(
             'আপনার নির্বাচিত পণ্য:',
             style: TextStyle(
@@ -226,7 +226,7 @@ class _ComparisonScreenState extends State<ComparisonScreen> {
 
         // Similar Products Header
         Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(8.0),
           child: Text(
             'অন্যান্য দোকান থেকে একই পণ্য:',
             style: TextStyle(

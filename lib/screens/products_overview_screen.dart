@@ -52,7 +52,7 @@ class ProductsOverviewScreen extends StatelessWidget {
                 "আর নয় অতিরিক্ত মূল্যে ক্রয়\nবাজার হোক শান্তিময়",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 28,
+                    fontSize: 24,
                     fontFamily: 'Mina Bold',
                     fontStyle: FontStyle.italic,
                     color: Colors.white),

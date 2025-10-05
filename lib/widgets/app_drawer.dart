@@ -1,4 +1,5 @@
 import 'package:ajker_dordam/main.dart';
+import 'package:ajker_dordam/screens/govt_price_list_screen.dart';
 import 'package:ajker_dordam/screens/upload_image_get_url.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -70,6 +71,15 @@ class _AppDrawerState extends State<AppDrawer> {
           },
           leading: Icon(Icons.price_check),
           title: Text("আজকের বাজার", style: textStyle),
+        ),
+        Divider(thickness: 2, height: 5),
+        ListTile(
+          onTap: () {
+            Navigator.of(context)
+                .pushReplacementNamed(GovtPriceListScreen.routeName);
+          },
+          leading: Icon(Icons.list_alt),
+          title: Text("সরকারি মূল্য তালিকা", style: textStyle),
         ),
         Divider(thickness: 2, height: 5),
         ListTile(
