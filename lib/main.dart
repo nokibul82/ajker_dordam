@@ -1,5 +1,6 @@
 import 'package:ajker_dordam/screens/govt_price_list_screen.dart';
 import 'package:ajker_dordam/screens/help_screen.dart';
+import 'package:ajker_dordam/screens/manual_complain_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -68,6 +69,7 @@ class MyApp extends StatelessWidget {
           ComplainScreen.routeName: (context) => ComplainScreen(Key("ComplainScreen")),
           ScannerScreen.routeName: (context) => ScannerScreen(),
           ImagePickerScreen.routeName: (context) => ImagePickerScreen(),
+          ManualComplainScreen.routeName: (context) => ManualComplainScreen(),
           ComplainConfirmScreen.routeName: (context) => ComplainConfirmScreen(),
           ComplainSuccessScreen.routeName: (context) => ComplainSuccessScreen(),
           ComplainHistoryScreen.routeName: (context) => ComplainHistoryScreen(),

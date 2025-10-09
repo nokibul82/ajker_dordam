@@ -1,3 +1,4 @@
+import './manual_complain_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -100,8 +101,7 @@ class ComplainScreen extends StatelessWidget {
               height: MediaQuery.of(context).size.height * 0.1,
               child: ElevatedButton(
                   onPressed: () async{
-                    await Provider.of<Shops>(context, listen: false).fetchAndSetShops();
-                    Navigator.of(context).pushReplacementNamed(ScannerScreen.routeName);
+                    Navigator.of(context).pushReplacementNamed(ManualComplainScreen.routeName);
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: MyApp.backColor,
